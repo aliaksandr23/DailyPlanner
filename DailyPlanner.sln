@@ -19,7 +19,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IdentityApi", "IdentityApi"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{ED56CC86-7123-4D99-A0CE-077718B66535}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DailyPlanner.IdentityApiHost", "IdentityApi\src\DailyPlanner.IdentityApiHost\DailyPlanner.IdentityApiHost.csproj", "{5EFDCB96-6D63-407E-B9D6-7AF969F732C5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DailyPlanner.IdentityApiHost", "IdentityApi\src\DailyPlanner.IdentityApiHost\DailyPlanner.IdentityApiHost.csproj", "{5EFDCB96-6D63-407E-B9D6-7AF969F732C5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BffClient", "BffClient", "{C72D2505-D484-4B45-BC0A-B83A7D2EE096}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReactWithASP.Server", "BffClient\ReactWithASP\ReactWithASP.Server\ReactWithASP.Server.csproj", "{9358B435-E11F-472A-84A9-E3F07E242029}"
+EndProject
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "reactwithasp.client", "BffClient\ReactWithASP\reactwithasp.client\reactwithasp.client.esproj", "{6A288B93-73D2-4402-A694-CF1DDAC3C14F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,6 +53,16 @@ Global
 		{5EFDCB96-6D63-407E-B9D6-7AF969F732C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5EFDCB96-6D63-407E-B9D6-7AF969F732C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5EFDCB96-6D63-407E-B9D6-7AF969F732C5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9358B435-E11F-472A-84A9-E3F07E242029}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9358B435-E11F-472A-84A9-E3F07E242029}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9358B435-E11F-472A-84A9-E3F07E242029}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9358B435-E11F-472A-84A9-E3F07E242029}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6A288B93-73D2-4402-A694-CF1DDAC3C14F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A288B93-73D2-4402-A694-CF1DDAC3C14F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A288B93-73D2-4402-A694-CF1DDAC3C14F}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{6A288B93-73D2-4402-A694-CF1DDAC3C14F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6A288B93-73D2-4402-A694-CF1DDAC3C14F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6A288B93-73D2-4402-A694-CF1DDAC3C14F}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -59,6 +75,8 @@ Global
 		{5D0ACB5E-0073-41E0-B8B5-5D29B498B229} = {EDF7C9DF-A09D-4321-B1AA-AE9A59E8943C}
 		{ED56CC86-7123-4D99-A0CE-077718B66535} = {6EED6B24-5F15-422B-B821-B269FE73498E}
 		{5EFDCB96-6D63-407E-B9D6-7AF969F732C5} = {ED56CC86-7123-4D99-A0CE-077718B66535}
+		{9358B435-E11F-472A-84A9-E3F07E242029} = {C72D2505-D484-4B45-BC0A-B83A7D2EE096}
+		{6A288B93-73D2-4402-A694-CF1DDAC3C14F} = {C72D2505-D484-4B45-BC0A-B83A7D2EE096}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {77FF7A9A-5AB5-407E-A09C-DE26B20D2F7B}
