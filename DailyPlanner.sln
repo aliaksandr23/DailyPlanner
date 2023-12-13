@@ -7,13 +7,19 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DailyPlannerApi", "DailyPla
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{EDF7C9DF-A09D-4321-B1AA-AE9A59E8943C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DailyPlanner.Domain", "DailyPlannerApi\src\DailyPlanner.Domain\DailyPlanner.Domain.csproj", "{311FECE4-57C2-46B4-868F-652DDDA30746}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DailyPlanner.Domain", "DailyPlannerApi\src\DailyPlanner.Domain\DailyPlanner.Domain.csproj", "{311FECE4-57C2-46B4-868F-652DDDA30746}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DailyPlanner.Infrastructure", "DailyPlannerApi\src\DailyPlanner.Infrastructure\DailyPlanner.Infrastructure.csproj", "{76A52613-02B4-4027-AE67-85E471275F52}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DailyPlanner.Infrastructure", "DailyPlannerApi\src\DailyPlanner.Infrastructure\DailyPlanner.Infrastructure.csproj", "{76A52613-02B4-4027-AE67-85E471275F52}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DailyPlanner.Application", "DailyPlannerApi\src\DailyPlanner.Application\DailyPlanner.Application.csproj", "{CEF25CC5-B37E-41FB-BD0C-73887F5FF2D6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DailyPlanner.Application", "DailyPlannerApi\src\DailyPlanner.Application\DailyPlanner.Application.csproj", "{CEF25CC5-B37E-41FB-BD0C-73887F5FF2D6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DailyPlanner.ApiHost", "DailyPlannerApi\src\DailyPlanner.ApiHost\DailyPlanner.ApiHost.csproj", "{5D0ACB5E-0073-41E0-B8B5-5D29B498B229}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DailyPlanner.ApiHost", "DailyPlannerApi\src\DailyPlanner.ApiHost\DailyPlanner.ApiHost.csproj", "{5D0ACB5E-0073-41E0-B8B5-5D29B498B229}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IdentityApi", "IdentityApi", "{6EED6B24-5F15-422B-B821-B269FE73498E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{ED56CC86-7123-4D99-A0CE-077718B66535}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DailyPlanner.IdentityApiHost", "IdentityApi\src\DailyPlanner.IdentityApiHost\DailyPlanner.IdentityApiHost.csproj", "{5EFDCB96-6D63-407E-B9D6-7AF969F732C5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,6 +43,10 @@ Global
 		{5D0ACB5E-0073-41E0-B8B5-5D29B498B229}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5D0ACB5E-0073-41E0-B8B5-5D29B498B229}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5D0ACB5E-0073-41E0-B8B5-5D29B498B229}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5EFDCB96-6D63-407E-B9D6-7AF969F732C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5EFDCB96-6D63-407E-B9D6-7AF969F732C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5EFDCB96-6D63-407E-B9D6-7AF969F732C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5EFDCB96-6D63-407E-B9D6-7AF969F732C5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -47,6 +57,8 @@ Global
 		{76A52613-02B4-4027-AE67-85E471275F52} = {EDF7C9DF-A09D-4321-B1AA-AE9A59E8943C}
 		{CEF25CC5-B37E-41FB-BD0C-73887F5FF2D6} = {EDF7C9DF-A09D-4321-B1AA-AE9A59E8943C}
 		{5D0ACB5E-0073-41E0-B8B5-5D29B498B229} = {EDF7C9DF-A09D-4321-B1AA-AE9A59E8943C}
+		{ED56CC86-7123-4D99-A0CE-077718B66535} = {6EED6B24-5F15-422B-B821-B269FE73498E}
+		{5EFDCB96-6D63-407E-B9D6-7AF969F732C5} = {ED56CC86-7123-4D99-A0CE-077718B66535}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {77FF7A9A-5AB5-407E-A09C-DE26B20D2F7B}
