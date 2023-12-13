@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DailyPlanner.Infrastructure
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DailyPlanner.Application", "DailyPlannerApi\src\DailyPlanner.Application\DailyPlanner.Application.csproj", "{CEF25CC5-B37E-41FB-BD0C-73887F5FF2D6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DailyPlanner.ApiHost", "DailyPlannerApi\src\DailyPlanner.ApiHost\DailyPlanner.ApiHost.csproj", "{5D0ACB5E-0073-41E0-B8B5-5D29B498B229}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,6 +33,10 @@ Global
 		{CEF25CC5-B37E-41FB-BD0C-73887F5FF2D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CEF25CC5-B37E-41FB-BD0C-73887F5FF2D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CEF25CC5-B37E-41FB-BD0C-73887F5FF2D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5D0ACB5E-0073-41E0-B8B5-5D29B498B229}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5D0ACB5E-0073-41E0-B8B5-5D29B498B229}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5D0ACB5E-0073-41E0-B8B5-5D29B498B229}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5D0ACB5E-0073-41E0-B8B5-5D29B498B229}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -40,6 +46,7 @@ Global
 		{311FECE4-57C2-46B4-868F-652DDDA30746} = {EDF7C9DF-A09D-4321-B1AA-AE9A59E8943C}
 		{76A52613-02B4-4027-AE67-85E471275F52} = {EDF7C9DF-A09D-4321-B1AA-AE9A59E8943C}
 		{CEF25CC5-B37E-41FB-BD0C-73887F5FF2D6} = {EDF7C9DF-A09D-4321-B1AA-AE9A59E8943C}
+		{5D0ACB5E-0073-41E0-B8B5-5D29B498B229} = {EDF7C9DF-A09D-4321-B1AA-AE9A59E8943C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {77FF7A9A-5AB5-407E-A09C-DE26B20D2F7B}
