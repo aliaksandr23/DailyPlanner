@@ -3,6 +3,12 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+#Identity key folder
+IdentityApi/src/DailyPlanner.IdentityApiHost/keys/
+
+#Project migration folders
+IdentityApi/src/DailyPlanner.IdentityApiHost/Data/Migrations/
+
 # User-specific files
 *.rsuser
 *.suo
