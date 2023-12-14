@@ -25,7 +25,7 @@ namespace DailyPlanner.ApiHost
                 options.AddPolicy("DailyPlannerPolicy", policy =>
                 {
                     policy.RequireAuthenticatedUser();
-                    policy.RequireClaim("scope", "DailyPlannerScope");
+                    policy.RequireClaim("scope", "DailyPlannerAPI");
                 })
             );
             services.AddScoped<ICurrentUserService, CurrentUserService>();

@@ -7,7 +7,7 @@ namespace DailyPlanner.IdentityApiHost
     {
         public static IEnumerable<ApiScope> ApiScopes => new List<ApiScope>
         {
-            new ApiScope("DailyPlannerAPI", "DailyPlanner")
+            new ApiScope("daily_planner", "DailyPlanner")
         };
 
         public static IEnumerable<IdentityResource> IdentityResources => new List<IdentityResource>
@@ -31,7 +31,7 @@ namespace DailyPlanner.IdentityApiHost
                 },
                 AllowedScopes = new List<string>
                 {
-                    "DailyPlannerAPI",
+                    "daily_planner",
                     IdentityServerConstants.StandardScopes.OpenId,
                     IdentityServerConstants.StandardScopes.Profile
                 },

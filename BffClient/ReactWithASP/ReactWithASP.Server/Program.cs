@@ -1,9 +1,39 @@
+using Duende.Bff.Yarp;
+using Microsoft.AspNetCore.Authentication.Cookies;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddBff()
+    .AddRemoteApis();
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultSignOutScheme = "oidc";
+    options.DefaultChallengeScheme = "oidc";
+}).AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
+{
+    options.Cookie.Name = "__BFF-SPA";
+    options.Cookie.SameSite = SameSiteMode.Strict;
+}).AddOpenIdConnect("oidc", options =>
+{
+    options.Authority = "https://localhost:5100";
+    options.ClientId = "WebInteractive";
+    options.ClientSecret = "DailyPlannerWebInteractiveSecret";
+    options.ResponseType = "code";
+    options.ResponseMode = "query";
+
+    options.UsePkce = true;
+    options.SaveTokens = true;
+    options.MapInboundClaims = false;
+    options.GetClaimsFromUserInfoEndpoint = true;
+
+    options.Scope.Clear();
+    options.Scope.Add("openid");
+    options.Scope.Add("profile");
+    options.Scope.Append("daily_planner");
+    options.Scope.Add("offline_access");
+});
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -12,7 +42,6 @@ var app = builder.Build();
 app.UseDefaultFiles();
 app.UseStaticFiles();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -20,11 +49,14 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseRouting();
+app.UseAuthentication();
+app.UseBff();
 app.UseAuthorization();
-
-app.MapControllers();
-
+app.MapBffManagementEndpoints();
+app.MapControllers()
+    .RequireAuthorization()
+    .AsBffApiEndpoint();
 app.MapFallbackToFile("/index.html");
 
 app.Run();

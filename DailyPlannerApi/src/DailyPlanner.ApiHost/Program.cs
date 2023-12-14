@@ -30,8 +30,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseAuthentication();
 app.UseAuthorization();
 app.UseMiddleware<ExceptionHandlingMiddleware>();
-app.MapControllers();
+app.MapControllers().RequireAuthorization("DailyPlannerPolicy");
 
 app.Run();

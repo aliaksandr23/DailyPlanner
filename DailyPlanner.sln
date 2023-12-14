@@ -23,7 +23,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DailyPlanner.IdentityApiHos
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BffClient", "BffClient", "{C72D2505-D484-4B45-BC0A-B83A7D2EE096}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReactWithASP.Server", "BffClient\ReactWithASP\ReactWithASP.Server\ReactWithASP.Server.csproj", "{9358B435-E11F-472A-84A9-E3F07E242029}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReactWithASP.Server", "BffClient\ReactWithASP\ReactWithASP.Server\ReactWithASP.Server.csproj", "{9358B435-E11F-472A-84A9-E3F07E242029}"
 EndProject
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "reactwithasp.client", "BffClient\ReactWithASP\reactwithasp.client\reactwithasp.client.esproj", "{6A288B93-73D2-4402-A694-CF1DDAC3C14F}"
 EndProject
