@@ -20,7 +20,7 @@ namespace DailyPlanner.ApiHost.Controllers
             return Ok(response);
         }
 
-        [HttpPut]
+        [HttpPatch]
         public async Task<ActionResult> UpdateColumn([FromBody] UpdateColumnCommand updateColumnCommand)
         {
             await Sender.Send(updateColumnCommand);

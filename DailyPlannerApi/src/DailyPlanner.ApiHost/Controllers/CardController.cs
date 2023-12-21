@@ -30,7 +30,7 @@ namespace DailyPlanner.ApiHost.Controllers
             return Ok(response);
         }
 
-        [HttpPut]
+        [HttpPatch]
         public async Task<ActionResult> UpdateCard([FromBody] UpdateCardCommand updateCardCommand)
         {
             await Sender.Send(updateCardCommand);

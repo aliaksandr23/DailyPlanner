@@ -40,7 +40,7 @@ namespace DailyPlanner.ApiHost.Controllers
             return Ok(response);
         }
 
-        [HttpPut]
+        [HttpPatch]
         public async Task<ActionResult> UpdateBoard([FromBody] UpdateBoardCommand updateBoardCommand)
         {
             await Sender.Send(updateBoardCommand);
