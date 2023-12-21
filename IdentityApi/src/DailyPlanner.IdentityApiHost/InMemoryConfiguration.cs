@@ -27,7 +27,7 @@ namespace DailyPlanner.IdentityApiHost
                 AllowedGrantTypes = GrantTypes.Code,
                 AllowedCorsOrigins =
                 {
-                    "https://localhost:50100",
+                    "https://localhost:7100",
                 },
                 AllowedScopes = new List<string>
                 {
@@ -36,10 +36,10 @@ namespace DailyPlanner.IdentityApiHost
                     IdentityServerConstants.StandardScopes.Profile
                 },
 
-                ClientUri = "https://localhost:50100",
-                RedirectUris = { "https://localhost:50100/signin-oidc" },
-                FrontChannelLogoutUri = "https://localhost:50100/signout-oidc",
-                PostLogoutRedirectUris = { "https://localhost:50100/signout-callback-oidc" },
+                ClientUri = "https://localhost:7100",
+                RedirectUris = { "https://localhost:7100/signin-oidc" },
+                FrontChannelLogoutUri = "https://localhost:7100/signout-oidc",
+                PostLogoutRedirectUris = { "https://localhost:7100/signout-callback-oidc" },
             }
         };
     }

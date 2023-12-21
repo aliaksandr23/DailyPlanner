@@ -13,7 +13,7 @@ namespace DailyPlanner.ApiHost
             services.AddSwaggerGen();
             services.AddEndpointsApiExplorer();
             services.AddHttpContextAccessor();
-            services.AddTransient<IMiddleware, ExceptionHandlingMiddleware>();
+            services.AddTransient<ExceptionHandlingMiddleware>();
             services.AddScoped<ICurrentUserService, CurrentUserService>();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
@@ -25,10 +25,11 @@ namespace DailyPlanner.ApiHost
                 options.AddPolicy("DailyPlannerPolicy", policy =>
                 {
                     policy.RequireAuthenticatedUser();
-                    policy.RequireClaim("scope", "DailyPlannerAPI");
+                    policy.RequireClaim("scope", "daily_planner");
                 })
             );
             services.AddScoped<ICurrentUserService, CurrentUserService>();
+
             return services;
         }
     }
