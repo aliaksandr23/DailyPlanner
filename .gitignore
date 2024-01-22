@@ -8,6 +8,7 @@ IdentityApi/src/DailyPlanner.IdentityApiHost/keys/
 
 #Project migration folders
 IdentityApi/src/DailyPlanner.IdentityApiHost/Data/Migrations/
+DailyPlannerApi/src/DailyPlanner.Infrastructure/Data/Migrations/
 
 # User-specific files
 *.rsuser
