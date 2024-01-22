@@ -2,7 +2,7 @@
 
 namespace DailyPlanner.Domain.Entities
 {
-    public class Card : BaseAuditableEntity
+    public sealed class Card : BaseAuditableEntity
     {
         public bool IsDone { get; set; }
         public string Title { get; set; }

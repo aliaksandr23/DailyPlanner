@@ -1,6 +1,6 @@
 ﻿namespace DailyPlanner.Domain.Entities
 {
-    public class Column : BaseAuditableEntity
+    public sealed class Column : BaseAuditableEntity
     {
         public string Title { get; set; }
         public Guid BoardId { get; set; }
