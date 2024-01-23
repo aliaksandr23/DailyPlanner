@@ -1,13 +1,13 @@
 ﻿using System.Security.Claims;
-using DailyPlanner.Infrastructure.Services.CurrentUser;
+using DailyPlanner.Infrastructure.Services.User;
 
-namespace DailyPlanner.ApiHost.Services
+namespace DailyPlanner.ApiHost.Services.User
 {
-    public class CurrentUserService : ICurrentUserService
+    public class UserService : IUserService
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public CurrentUserService(IHttpContextAccessor httpContextAccessor)
+        public UserService(IHttpContextAccessor httpContextAccessor)
         {
             _httpContextAccessor = httpContextAccessor;
         }

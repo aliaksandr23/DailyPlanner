@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-using DailyPlanner.Infrastructure.Services.CurrentUser;
+using DailyPlanner.Infrastructure.Services.User;
 
 namespace DailyPlanner.ApiHost.Controllers
 {
@@ -11,11 +11,11 @@ namespace DailyPlanner.ApiHost.Controllers
     public class BaseController : ControllerBase
     {
         protected ISender Sender { get; }
-        private readonly ICurrentUserService _userService;
+        private readonly IUserService _userService;
 
         protected Guid UserId => _userService.UserId;
 
-        public BaseController(ICurrentUserService userService, ISender sender)
+        public BaseController(IUserService userService, ISender sender)
         {
             Sender = sender;
             _userService = userService;

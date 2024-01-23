@@ -1,20 +1,19 @@
-﻿using DailyPlanner.ApiHost.Services;
-using DailyPlanner.ApiHost.Middleware;
+﻿using DailyPlanner.ApiHost.Middleware;
+using DailyPlanner.ApiHost.Services.User;
+using DailyPlanner.Infrastructure.Services.User;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using DailyPlanner.Infrastructure.Services.CurrentUser;
 
 namespace DailyPlanner.ApiHost
 {
     public static class ApiHostDI
     {
-        public static IServiceCollection AddApiHostServices(this IServiceCollection services)
+        public static IServiceCollection AddApiHostServices(this IServiceCollection services, IWebHostEnvironment environment)
         {
             services.AddControllers();
             services.AddSwaggerGen();
             services.AddEndpointsApiExplorer();
             services.AddHttpContextAccessor();
             services.AddTransient<ExceptionHandlingMiddleware>();
-            services.AddScoped<ICurrentUserService, CurrentUserService>();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
                 {
@@ -28,8 +27,10 @@ namespace DailyPlanner.ApiHost
                     policy.RequireClaim("scope", "daily_planner");
                 })
             );
-            services.AddScoped<ICurrentUserService, CurrentUserService>();
-
+            if (environment.IsDevelopment())
+                services.AddScoped<IUserService, DevUserService>();
+            else
+                services.AddScoped<IUserService, UserService>();
             return services;
         }
     }

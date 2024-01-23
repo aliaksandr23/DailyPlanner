@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using DailyPlanner.Application.Common.DTO;
-using DailyPlanner.Infrastructure.Services.CurrentUser;
+using DailyPlanner.Infrastructure.Services.User;
 using DailyPlanner.Application.CQRS.Cards.Queries.GetById;
 using DailyPlanner.Application.CQRS.Cards.Commands.Create;
 using DailyPlanner.Application.CQRS.Cards.Commands.Delete;
@@ -11,9 +11,8 @@ namespace DailyPlanner.ApiHost.Controllers
 {
     public class CardController : BaseController
     {
-        public CardController(ICurrentUserService userService, ISender sender)
-            : base(userService, sender)
-        { }
+        public CardController(IUserService userService, ISender sender)
+            : base(userService, sender) { }
 
         [HttpGet]
         public async Task<ActionResult<CardDto>> GetCard(Guid id)

@@ -1,17 +1,17 @@
 ﻿using DailyPlanner.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using DailyPlanner.Infrastructure.Services.User;
 using DailyPlanner.Infrastructure.Services.DateAndTime;
-using DailyPlanner.Infrastructure.Services.CurrentUser;
 
 namespace DailyPlanner.Infrastructure.Data.Interceptors
 {
     public class AuditableEntitySaveChangesInterceptor : SaveChangesInterceptor
     {
-        private readonly ICurrentUserService _userService;
+        private readonly IUserService _userService;
         private readonly IDateTimeService _dateTimeService;
 
-        public AuditableEntitySaveChangesInterceptor(IDateTimeService dateTimeService, ICurrentUserService userService)
+        public AuditableEntitySaveChangesInterceptor(IDateTimeService dateTimeService, IUserService userService)
         {
             _userService = userService;
             _dateTimeService = dateTimeService;

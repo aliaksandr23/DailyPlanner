@@ -20,11 +20,11 @@ namespace DailyPlanner.Infrastructure.Data
             _dateTimeService = dateTimeService;
         }
 
-        public async Task InitializeAsync()
+        public async Task InitializeAsync(CancellationToken cancellationToken = default)
         {
             try
             {
-                await _context.Database.MigrateAsync();
+                await _context.Database.MigrateAsync(cancellationToken);
             }
             catch (Exception ex)
             {
@@ -33,11 +33,11 @@ namespace DailyPlanner.Infrastructure.Data
             }
         }
 
-        public async Task SeedAsync()
+        public async Task SeedAsync(CancellationToken cancellationToken = default)
         {
             try
             {
-                await TrySeedAsync();
+                await TrySeedAsync(cancellationToken);
             }
             catch (Exception ex)
             {
@@ -46,7 +46,7 @@ namespace DailyPlanner.Infrastructure.Data
             }
         }
 
-        private async Task TrySeedAsync()
+        private async Task TrySeedAsync(CancellationToken cancellationToken = default)
         {
             if (!_context.Boards.Any())
             {
@@ -57,22 +57,19 @@ namespace DailyPlanner.Infrastructure.Data
                     IsFavorite = true,
                     Columns = new List<Column>
                     {
-                        new Column { Title = "Is done" },
-                        new Column
-                        {
+                        new() { Title = "Is done" },
+                        new() {
                             Title = "Needs to be done",
                             Cards = new List<Card>
                             {
-                                new Card
-                                {
+                                new() {
                                     Title = "Create Identity project",
                                     Description = "Сreate an API that will authenticate and authorize users and store their personal data",
                                     Priority = CardPriority.Medium,
                                     StartDate = _dateTimeService.Now.AddDays(5),
                                     EndDate = _dateTimeService.Now.AddDays(14),
                                 },
-                                new Card
-                                {
+                                new() {
                                     Title = "Create Client",
                                     Description = "Сreate a React project through which users will interact with the application",
                                     Priority = CardPriority.Medium,
@@ -80,13 +77,11 @@ namespace DailyPlanner.Infrastructure.Data
                                 }
                             }
                         },
-                        new Column
-                        {
+                        new() {
                             Title = "In progress",
                             Cards = new List<Card>
                             {
-                                new Card
-                                {
+                                new() {
                                     Title = "Сreate tests",
                                     Description = "Сreate unit and integration tests for each required level of the application",
                                     Priority = CardPriority.High,
@@ -96,9 +91,9 @@ namespace DailyPlanner.Infrastructure.Data
                             }
                         },
                     }
-                });
+                }, cancellationToken);
 
-                await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync(cancellationToken);
             }
         }
     }

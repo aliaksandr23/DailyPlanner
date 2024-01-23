@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using DailyPlanner.ApiHost.ViewModels;
 using DailyPlanner.Application.Common.DTO;
-using DailyPlanner.Infrastructure.Services.CurrentUser;
+using DailyPlanner.Infrastructure.Services.User;
 using DailyPlanner.Application.CQRS.Boards.Queries.GetAll;
 using DailyPlanner.Application.CQRS.Boards.Commands.Create;
 using DailyPlanner.Application.CQRS.Boards.Commands.Delete;
@@ -13,7 +13,7 @@ namespace DailyPlanner.ApiHost.Controllers
 {
     public class BoardController : BaseController
     {
-        public BoardController(ICurrentUserService userService, ISender sender)
+        public BoardController(IUserService userService, ISender sender)
             : base(userService, sender) { }
 
         [HttpGet]

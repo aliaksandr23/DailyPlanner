@@ -1,8 +1,8 @@
 ﻿using DailyPlanner.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using DailyPlanner.Infrastructure.Data;
+using DailyPlanner.Infrastructure.Services.User;
 using DailyPlanner.Application.Common.Repositories;
-using DailyPlanner.Infrastructure.Services.CurrentUser;
 
 namespace DailyPlanner.Infrastructure.Repositories
 {
@@ -10,9 +10,9 @@ namespace DailyPlanner.Infrastructure.Repositories
     {
         protected DbSet<TEntity> DbSet { get; init; }
         protected DailyPlannerDbContext Context { get; init; }
-        protected readonly ICurrentUserService _userService;
+        protected readonly IUserService _userService;
 
-        public BaseRepository(DailyPlannerDbContext context, ICurrentUserService userService)
+        public BaseRepository(DailyPlannerDbContext context, IUserService userService)
         {
             Context = context;
             DbSet = context.Set<TEntity>();
