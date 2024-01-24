@@ -12,6 +12,6 @@ namespace DailyPlanner.ApiHost.Services.User
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public Guid UserId => Guid.Parse(_httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier));
+        public Guid UserId => Guid.Parse(_httpContextAccessor.HttpContext.User.FindFirstValue("sub"));
     }
 }

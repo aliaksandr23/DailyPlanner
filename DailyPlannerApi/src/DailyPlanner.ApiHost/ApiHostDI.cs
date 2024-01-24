@@ -7,30 +7,29 @@ namespace DailyPlanner.ApiHost
 {
     public static class ApiHostDI
     {
-        public static IServiceCollection AddApiHostServices(this IServiceCollection services, IWebHostEnvironment environment)
+        public static IServiceCollection AddApiHostServices(this IServiceCollection services)
         {
-            services.AddControllers();
             services.AddSwaggerGen();
-            services.AddEndpointsApiExplorer();
+            services.AddControllers();
             services.AddHttpContextAccessor();
+            services.AddEndpointsApiExplorer();
+            services.AddScoped<IUserService, UserService>();
             services.AddTransient<ExceptionHandlingMiddleware>();
+
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
                 {
+                    options.MapInboundClaims = false;
                     options.Authority = "https://localhost:5100";
-                    options.TokenValidationParameters.ValidateAudience = true;
+                    options.TokenValidationParameters.ValidateAudience = false;
                 });
-            services.AddAuthorization(options =>
-                options.AddPolicy("DailyPlannerPolicy", policy =>
+
+            services.AddAuthorizationBuilder()
+                .AddPolicy("DailyPlannerPolicy", policy =>
                 {
-                    policy.RequireAuthenticatedUser();
+                    policy.RequireAuthenticatedUser().RequireClaim("sub");
                     policy.RequireClaim("scope", "daily_planner");
-                })
-            );
-            if (environment.IsDevelopment())
-                services.AddScoped<IUserService, DevUserService>();
-            else
-                services.AddScoped<IUserService, UserService>();
+                });
             return services;
         }
     }

@@ -7,7 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddPersistenceServices(builder.Configuration);
 builder.Services.AddApplicationServices();
-builder.Services.AddApiHostServices(builder.Environment);
+builder.Services.AddApiHostServices();
 builder.Services.AddHostedService<DailyPlannerWorker>();
 
 var app = builder.Build();
@@ -22,6 +22,7 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseMiddleware<ExceptionHandlingMiddleware>();
-app.MapControllers().RequireAuthorization("DailyPlannerPolicy");
+app.MapControllers()
+    .RequireAuthorization("DailyPlannerPolicy");
 
 app.Run();

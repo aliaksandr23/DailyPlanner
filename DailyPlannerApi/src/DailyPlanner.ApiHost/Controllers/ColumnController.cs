@@ -13,22 +13,22 @@ namespace DailyPlanner.ApiHost.Controllers
         public ColumnController(IUserService userService, ISender sender)
             : base(userService, sender) { }
 
-        [HttpPost]
-        public async Task<ActionResult<ColumnDto>> CreateColumn([FromBody] CreateColumnCommand createCardCommand)
+        [HttpPost("[action]")]
+        public async Task<ActionResult<ColumnDto>> Create([FromBody] CreateColumnCommand createCardCommand)
         {
             var response = await Sender.Send(createCardCommand);
             return Ok(response);
         }
 
-        [HttpPatch]
-        public async Task<ActionResult> UpdateColumn([FromBody] UpdateColumnCommand updateColumnCommand)
+        [HttpPatch("[action]")]
+        public async Task<ActionResult> Update([FromBody] UpdateColumnCommand updateColumnCommand)
         {
             await Sender.Send(updateColumnCommand);
             return NoContent();
         }
 
-        [HttpDelete]
-        public async Task<ActionResult> DeleteColumn([FromBody] DeleteColumnCommand deleteColumnCommand)
+        [HttpDelete("[action]")]
+        public async Task<ActionResult> Delete([FromBody] DeleteColumnCommand deleteColumnCommand)
         {
             await Sender.Send(deleteColumnCommand);
             return NoContent();

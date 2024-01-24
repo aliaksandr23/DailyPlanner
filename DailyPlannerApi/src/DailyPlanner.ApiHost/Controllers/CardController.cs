@@ -14,30 +14,29 @@ namespace DailyPlanner.ApiHost.Controllers
         public CardController(IUserService userService, ISender sender)
             : base(userService, sender) { }
 
-        [HttpGet]
-        public async Task<ActionResult<CardDto>> GetCard(Guid id)
+        [HttpGet("[action]")]
+        public async Task<ActionResult<CardDto>> GetById(Guid id)
         {
-            var getCardQuery = new GetByIdCardQuery() { Id = id };
-            var response = await Sender.Send(getCardQuery);
+            var response = await Sender.Send(new GetByIdCardQuery() { Id = id });
             return Ok(response);
         }
 
-        [HttpPost]
-        public async Task<ActionResult<CardDto>> CreateCard([FromBody] CreateCardCommand createCardCommand)
+        [HttpPost("[action]")]
+        public async Task<ActionResult<CardDto>> Create([FromBody] CreateCardCommand createCardCommand)
         {
             var response = await Sender.Send(createCardCommand);
             return Ok(response);
         }
 
-        [HttpPatch]
-        public async Task<ActionResult> UpdateCard([FromBody] UpdateCardCommand updateCardCommand)
+        [HttpPatch("[action]")]
+        public async Task<ActionResult> Update([FromBody] UpdateCardCommand updateCardCommand)
         {
             await Sender.Send(updateCardCommand);
             return NoContent();
         }
 
-        [HttpDelete]
-        public async Task<ActionResult> DeleteCard([FromBody] DeleteCardCommand deleteCardCommand)
+        [HttpDelete("[action]")]
+        public async Task<ActionResult> Delete([FromBody] DeleteCardCommand deleteCardCommand)
         {
             await Sender.Send(deleteCardCommand);
             return NoContent();

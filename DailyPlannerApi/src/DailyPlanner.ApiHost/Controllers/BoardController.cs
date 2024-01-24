@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using DailyPlanner.ApiHost.ViewModels;
 using DailyPlanner.Application.Common.DTO;
 using DailyPlanner.Infrastructure.Services.User;
 using DailyPlanner.Application.CQRS.Boards.Queries.GetAll;
@@ -16,39 +15,36 @@ namespace DailyPlanner.ApiHost.Controllers
         public BoardController(IUserService userService, ISender sender)
             : base(userService, sender) { }
 
-        [HttpGet]
-        [Route("Board/id:guid")]
-        public async Task<ActionResult<BoardDto>> GetBoard(Guid id)
+        [HttpGet("[action]:Guid")]
+        public async Task<ActionResult<BoardDto>> GetById(Guid id)
         {
-            var getBoardQuery = new GetByIdBoardQuery() { Id = id, };
-            var response = await Sender.Send(getBoardQuery);
+            var response = await Sender.Send(new GetByIdBoardQuery() { Id = id, });
             return Ok(response);
         }
 
-        [HttpGet]
-        public async Task<ActionResult<BoardsVM>> GetBoards()
+        [HttpGet("[action]")]
+        public async Task<ActionResult<IEnumerable<BoardDto>>> GetAll()
         {
-            var getBoardsQuery = new GetAllBoardsQuery();
-            var response = await Sender.Send(getBoardsQuery);
+            var response = await Sender.Send(new GetAllBoardsQuery());
             return Ok(response);
         }
 
-        [HttpPost]
-        public async Task<ActionResult<BoardDto>> CreateBoard([FromBody] CreateBoardCommand createBoardCommand)
+        [HttpPost("[action]")]
+        public async Task<ActionResult<BoardDto>> Create([FromBody] CreateBoardCommand createBoardCommand)
         {
             var response = await Sender.Send(createBoardCommand);
             return Ok(response);
         }
 
-        [HttpPatch]
-        public async Task<ActionResult> UpdateBoard([FromBody] UpdateBoardCommand updateBoardCommand)
+        [HttpPatch("[action]")]
+        public async Task<ActionResult> Update([FromBody] UpdateBoardCommand updateBoardCommand)
         {
             await Sender.Send(updateBoardCommand);
             return NoContent();
         }
 
-        [HttpDelete]
-        public async Task<ActionResult> DeleteBoard([FromBody] DeleteBoardCommand deleteBoardCommand)
+        [HttpDelete("[action]")]
+        public async Task<ActionResult> Delete([FromBody] DeleteBoardCommand deleteBoardCommand)
         {
             await Sender.Send(deleteBoardCommand);
             return NoContent();
