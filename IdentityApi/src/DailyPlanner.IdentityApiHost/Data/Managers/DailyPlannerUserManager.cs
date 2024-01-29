@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Identity;
-using System.ComponentModel.DataAnnotations;
 using DailyPlanner.IdentityApiHost.Data.Entities;
 
 namespace DailyPlanner.IdentityApiHost.Data.Managers
@@ -18,18 +17,6 @@ namespace DailyPlanner.IdentityApiHost.Data.Managers
             ILookupNormalizer keyNormalizer, IdentityErrorDescriber errors)
             : base(store, optionsAccessor, passwordHasher, userValidators,
                   passwordValidators, keyNormalizer, errors, services, logger)
-        {
-        }
-
-        public async Task<DailyPlannerUser> GetUserByLoginAsync(string login)
-        {
-            var emailValidator = new EmailAddressAttribute();
-
-            var user = emailValidator.IsValid(login)
-                ? await FindByEmailAsync(login)
-                : await FindByNameAsync(login);
-
-            return user;
-        }
+        { }
     }
 }

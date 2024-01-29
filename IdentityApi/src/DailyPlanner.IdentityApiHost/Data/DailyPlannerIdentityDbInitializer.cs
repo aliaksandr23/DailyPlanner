@@ -20,46 +20,46 @@ namespace DailyPlanner.IdentityApiHost.Data
             _userManager = userManager;
         }
 
-        public async Task TryInitializeAsync()
+        public async Task InitializeAsync(CancellationToken cancellationToken = default)
         {
             try
             {
-                await _context.Database.MigrateAsync();
+                await _context.Database.MigrateAsync(cancellationToken);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"An error occurred while initializing the database {ex.Message}");
+                _logger.LogError(ex, "An error occurred while initializing the database");
                 throw;
             }
         }
 
-        public async Task TrySeedAsync()
+        public async Task SeedAsync()
         {
             try
             {
-                await SeedAsync();
+                await TrySeedAsync();
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"An error occurred while seeding the database {ex.Message}");
+                _logger.LogError(ex, "An error occurred while seeding the database");
                 throw;
             }
         }
 
-        private async Task SeedAsync()
+        private async Task TrySeedAsync()
         {
             var admin = await _userManager.FindByNameAsync("Admin");
             if (admin is null)
             {
                 admin = new DailyPlannerUser
                 {
+                    Id = "F1DDF39A-41C5-40EA-8310-2D855DC6A192",
                     UserName = "Admin",
                     Email = "Admin@mail.com",
                     EmailConfirmed = true,
                 };
 
                 var result = await _userManager.CreateAsync(admin, "Pa$$word123");
-
                 if (!result.Succeeded)
                 {
                     throw new Exception(result.Errors.First().Description);
@@ -67,8 +67,8 @@ namespace DailyPlanner.IdentityApiHost.Data
 
                 result = await _userManager.AddClaimsAsync(admin, new Claim[]
                 {
-                    new Claim(JwtClaimTypes.Name, "Alexander"),
-                    new Claim(JwtClaimTypes.Email, "Admin@mail.com")
+                    new(JwtClaimTypes.Name, "Admin"),
+                    new(JwtClaimTypes.Email, "Admin@mail.com")
                 });
 
                 if (!result.Succeeded)

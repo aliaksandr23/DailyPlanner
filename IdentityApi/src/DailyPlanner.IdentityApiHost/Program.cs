@@ -4,55 +4,49 @@ using Microsoft.EntityFrameworkCore;
 using DailyPlanner.IdentityApiHost.Data;
 using DailyPlanner.IdentityApiHost.Data.Entities;
 using DailyPlanner.IdentityApiHost.Data.Managers;
-using DailyPlanner.IdentityApiHost.Services.UserService;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
-builder.Services.AddSwaggerGen();
-builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddRazorPages();
 builder.Services.AddDbContext<DailyPlannerIdentityDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DailyPlannerIdentityDbConnection"));
 });
-builder.Services.AddIdentity<DailyPlannerUser, IdentityRole>(options =>
-{
-    options.User.RequireUniqueEmail = true;
-})
+
+builder.Services
+    .AddIdentity<DailyPlannerUser, IdentityRole>(options =>
+    {
+        options.User.RequireUniqueEmail = true;
+    })
     .AddEntityFrameworkStores<DailyPlannerIdentityDbContext>()
     .AddUserManager<DailyPlannerUserManager>()
     .AddSignInManager<DailyPlannerSignInManager>()
     .AddDefaultTokenProviders();
-builder.Services.AddIdentityServer()
+
+builder.Services
+    .AddIdentityServer(options =>
+    {
+        options.Events.RaiseErrorEvents = true;
+        options.Events.RaiseInformationEvents = true;
+        options.Events.RaiseFailureEvents = true;
+        options.Events.RaiseSuccessEvents = true;
+        options.EmitStaticAudienceClaim = true;
+    })
     .AddInMemoryClients(InMemoryConfiguration.Clients)
     .AddInMemoryApiScopes(InMemoryConfiguration.ApiScopes)
     .AddInMemoryIdentityResources(InMemoryConfiguration.IdentityResources)
     .AddAspNetIdentity<DailyPlannerUser>();
-builder.Services.AddScoped<IDailyPlannerUserService, DailyPlannerUserService>();
+
 builder.Services.AddScoped<DailyPlannerIdentityDbInitializer>();
+builder.Services.AddHostedService<DailyPlannerIdentityWorker>();
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-
-    using (var scope = app.Services.CreateScope())
-    {
-        var dbInitializer = scope.ServiceProvider.GetRequiredService<DailyPlannerIdentityDbInitializer>();
-        await dbInitializer.TryInitializeAsync();
-
-        if (args.Contains("/seed"))
-        {
-            await dbInitializer.TrySeedAsync();
-        }
-    }
-}
-
+app.UseStaticFiles();
 app.UseHttpsRedirection();
 app.UseIdentityServer();
 app.UseAuthorization();
-app.MapControllers();
+app.MapRazorPages()
+    .RequireAuthorization();
 
 app.Run();
