@@ -1,10 +1,10 @@
-import { fileURLToPath, URL } from 'node:url';
-
-import { defineConfig } from 'vite';
-import plugin from '@vitejs/plugin-react';
 import fs from 'fs';
 import path from 'path';
+import { env } from 'process';
+import { defineConfig } from 'vite';
+import plugin from '@vitejs/plugin-react';
 import child_process from 'child_process';
+import { fileURLToPath, URL } from 'node:url';
 
 const baseFolder =
     process.env.APPDATA !== undefined && process.env.APPDATA !== ''
@@ -36,6 +36,9 @@ if (!fs.existsSync(certFilePath) || !fs.existsSync(keyFilePath)) {
     }
 }
 
+const target = env.ASPNETCORE_HTTPS_PORT ? `https://localhost:${env.ASPNETCORE_HTTPS_PORT}` :
+    env.ASPNETCORE_URLS ? env.ASPNETCORE_URLS.split(';')[0] : 'https://localhost:7100';
+
 // https://vitejs.dev/config/
 export default defineConfig({
     plugins: [plugin()],
@@ -46,10 +49,26 @@ export default defineConfig({
     },
     server: {
         proxy: {
-            '^/weatherforecast': {
-                target: 'https://localhost:7153/',
+            '^/account': {
+                target,
                 secure: false
-            }
+            },
+            '^/signin-oidc': {
+                target,
+                secure: false
+            },
+            '^/signout-callback-oidc': {
+                target,
+                secure: false
+            },
+            '^/Board/': {
+                target,
+                secure: false
+            },
+            '^/Column/': {
+                target,
+                secure: false
+            },
         },
         port: 5173,
         https: {

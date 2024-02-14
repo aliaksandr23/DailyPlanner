@@ -1,55 +1,32 @@
-import { useEffect, useState } from 'react';
-import './App.css';
+import { useEffect } from "react";
+import AppRouter from "./AppRouter";
+import { RouterProvider } from "react-router-dom";
+import { setUserData } from "./redux/slices/authSlice";
+import { useAppDispatch } from "./redux/hooks/authHooks";
+import { Spinner } from "./components/UI/Spinner/Spinner";
+import { useGetUserInfoQuery } from "./redux/slices/apiSlice";
 
-interface Forecast {
-    date: string;
-    temperatureC: number;
-    temperatureF: number;
-    summary: string;
-}
-
-function App() {
-    const [forecasts, setForecasts] = useState<Forecast[]>();
+const App = () => {
+    const dispatch = useAppDispatch();
+    const {
+        data: userClaims,
+        isLoading,
+        isSuccess,
+    } = useGetUserInfoQuery(undefined, {
+        pollingInterval: 300000, //perform a refetch every 5 mins
+    });
 
     useEffect(() => {
-        populateWeatherData();
-    }, []);
+        if (isSuccess) {
+            dispatch(setUserData(userClaims));
+        }
+    }, [isSuccess, userClaims, dispatch]);
 
-    const contents = forecasts === undefined
-        ? <p><em>Loading... Please refresh once the ASP.NET backend has started. See <a href="https://aka.ms/jspsintegrationreact">https://aka.ms/jspsintegrationreact</a> for more details.</em></p>
-        : <table className="table table-striped" aria-labelledby="tabelLabel">
-            <thead>
-                <tr>
-                    <th>Date</th>
-                    <th>Temp. (C)</th>
-                    <th>Temp. (F)</th>
-                    <th>Summary</th>
-                </tr>
-            </thead>
-            <tbody>
-                {forecasts.map(forecast =>
-                    <tr key={forecast.date}>
-                        <td>{forecast.date}</td>
-                        <td>{forecast.temperatureC}</td>
-                        <td>{forecast.temperatureF}</td>
-                        <td>{forecast.summary}</td>
-                    </tr>
-                )}
-            </tbody>
-        </table>;
-
-    return (
-        <div>
-            <h1 id="tabelLabel">Weather forecast</h1>
-            <p>This component demonstrates fetching data from the server.</p>
-            {contents}
-        </div>
-    );
-
-    async function populateWeatherData() {
-        const response = await fetch('weatherforecast');
-        const data = await response.json();
-        setForecasts(data);
+    if (isLoading) {
+        return (<Spinner />);
+    }
+    else {
+        return (<RouterProvider router={AppRouter} />);
     }
 }
 

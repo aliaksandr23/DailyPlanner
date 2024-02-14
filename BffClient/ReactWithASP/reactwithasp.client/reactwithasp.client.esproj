@@ -8,4 +8,9 @@
     <!-- Folder where production build objects will be placed -->
     <PublishAssetsDirectory>$(MSBuildProjectDirectory)\dist</PublishAssetsDirectory>
   </PropertyGroup>
+  <ItemGroup>
+    <Folder Include="src\components\UI\Modal\" />
+    <Folder Include="src\redux\hooks\" />
+    <Folder Include="src\types\" />
+  </ItemGroup>
 </Project>
