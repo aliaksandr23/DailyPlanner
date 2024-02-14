@@ -14,15 +14,24 @@ namespace DailyPlanner.Infrastructure.Repositories
 
         public async Task<Board> GetBoardByIdAsync(Guid id, CancellationToken cancellationToken)
         {
-            var board = await DbSet.FirstOrDefaultAsync(b => b.Id == id
-                && b.CreatedBy == _userService.UserId, cancellationToken);
-            return board ?? throw new EntityNotFoundException(typeof(Board));
+            return await DbSet
+            .Include(b => b.Columns)
+                .ThenInclude(c => c.Cards)
+            .SingleOrDefaultAsync(b => b.Id == id, cancellationToken)
+            ?? throw new EntityNotFoundException(typeof(Board));
         }
 
         public async Task<IEnumerable<Board>> GetAllBoardsAsync(CancellationToken cancellationToken)
         {
-            return await DbSet.Where(b => b.CreatedBy == _userService.UserId 
-                && b.CreatedBy == _userService.UserId).ToListAsync(cancellationToken);
+            return await DbSet
+            .Where(b => b.CreatedBy == _userService.UserId)
+            .Select(b => new Board
+            {
+                Id = b.Id,
+                Title = b.Title,
+                IsFavorite = b.IsFavorite
+            })
+            .ToListAsync(cancellationToken);
         }
     }
 }

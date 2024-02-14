@@ -9,7 +9,6 @@
         public Guid? UpdatedBy { get; init; }
         public DateTime CreatedOn { get; init; }
         public DateTime? UpdatedOn { get; init; }
-        public BoardDto Board { get; init; }
         public IEnumerable<CardDto> Cards { get; init; }
     }
 }

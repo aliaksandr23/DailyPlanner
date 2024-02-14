@@ -15,7 +15,7 @@ namespace DailyPlanner.ApiHost.Controllers
         public BoardController(IUserService userService, ISender sender)
             : base(userService, sender) { }
 
-        [HttpGet("[action]:Guid")]
+        [HttpGet("[action]")]
         public async Task<ActionResult<BoardDto>> GetById(Guid id)
         {
             var response = await Sender.Send(new GetByIdBoardQuery() { Id = id, });

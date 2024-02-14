@@ -15,6 +15,5 @@
         public DateTime? StartDate { get; init; }
         public DateTime? RemindDate { get; init; }
         public CardPriorityDto Priority { get; init; }
-        public ColumnDto Column { get; init; }
     }
 }
