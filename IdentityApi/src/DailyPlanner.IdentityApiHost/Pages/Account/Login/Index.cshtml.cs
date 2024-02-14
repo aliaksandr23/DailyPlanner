@@ -21,8 +21,6 @@ public class Index(
     private readonly DailyPlannerSignInManager _signInManager = signInManager;
     private readonly IIdentityServerInteractionService _interaction = interaction;
 
-    public ViewModel View { get; set; }
-
     [BindProperty]
     public InputModel Input { get; set; }
 
