@@ -9,11 +9,11 @@
         public bool IsDone { get; init; }
         public Guid CreatedBy { get; init; }
         public Guid? UpdatedBy { get; init; }
+        public string Priority { get; init; }
         public DateTime CreatedOn { get; init; }
         public DateTime? UpdatedOn { get; init; }
         public DateTime? EndDate { get; init; }
         public DateTime? StartDate { get; init; }
         public DateTime? RemindDate { get; init; }
-        public CardPriorityDto Priority { get; init; }
     }
 }

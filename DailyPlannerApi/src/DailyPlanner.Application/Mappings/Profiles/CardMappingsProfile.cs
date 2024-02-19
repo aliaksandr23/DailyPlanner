@@ -12,18 +12,13 @@ namespace DailyPlanner.Application.Mappings.Profiles
         public CardMappingsProfile()
         {
             CreateMap<Card, CardDto>()
-                .ForMember(dst => dst.Priority, opt => opt.MapFrom(src =>
-                new CardPriorityDto
-                {
-                    Index = (int)src.Priority,
-                    Value = src.Priority.ToString()
-                }));
+                .ForMember(dst => dst.Priority, opt => opt.MapFrom(src => src.Priority.ToString()));
             CreateMap<CreateCardCommand, Card>()
-                .ForMember(dst => dst.Priority, opt => opt.MapFrom(src => (CardPriority)src.Priority.Index))
+                .ForMember(dst => dst.Priority, opt => opt.MapFrom(src => Enum.Parse(typeof(CardPriority), src.Priority)))
                 .ValidateMemberList(MemberList.Source);
             CreateMap<UpdateCardCommand, Card>()
-                .ForMember(dst => dst.Priority, opt => opt.MapFrom(src => (CardPriority)src.Priority.Index))
+                .ForMember(dst => dst.Priority, opt => opt.MapFrom(src => Enum.Parse(typeof(CardPriority), src.Priority)))
                 .ValidateMemberList(MemberList.Source);
         }
     }
-}
+}   

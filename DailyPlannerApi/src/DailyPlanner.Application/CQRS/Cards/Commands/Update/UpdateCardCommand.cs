@@ -10,7 +10,7 @@ namespace DailyPlanner.Application.CQRS.Cards.Commands.Update
         public string Title { get; init; }
         public string Description { get; init; }
         public bool IsDone { get; init; }
-        public CardPriorityDto Priority { get; init; }
+        public string Priority { get; init; }
         public DateTime? EndDate { get; init; }
         public DateTime? StartDate { get; init; }
         public DateTime? RemindDate { get; init; }
