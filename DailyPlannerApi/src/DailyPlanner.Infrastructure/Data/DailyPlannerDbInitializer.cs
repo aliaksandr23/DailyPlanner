@@ -55,7 +55,6 @@ namespace DailyPlanner.Infrastructure.Data
                     Title = "Daily Planner",
                     IsPrivate = true,
                     IsFavorite = true,
-                    CreatedBy = new("26D3DD11-C40A-463A-A90B-1E2FCFFB4AE9"),
                     Columns = new List<Column>
                     {
                         new() { Title = "Is done" },

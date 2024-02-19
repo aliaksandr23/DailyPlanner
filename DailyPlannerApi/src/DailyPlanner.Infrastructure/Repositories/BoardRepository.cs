@@ -17,7 +17,7 @@ namespace DailyPlanner.Infrastructure.Repositories
             return await DbSet
             .Include(b => b.Columns)
                 .ThenInclude(c => c.Cards)
-            .SingleOrDefaultAsync(b => b.Id == id, cancellationToken)
+            .FirstOrDefaultAsync(b => b.Id == id, cancellationToken)
             ?? throw new EntityNotFoundException(typeof(Board));
         }
 
