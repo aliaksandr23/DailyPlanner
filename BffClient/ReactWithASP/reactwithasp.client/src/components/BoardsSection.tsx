@@ -2,8 +2,8 @@ import { Link } from "react-router-dom";
 import { Modal } from "./UI/Modal/Modal";
 import { useMemo, useState } from "react";
 import { Board, SectionType } from "../types/types";
-import { useCreateBoardMutation } from "../redux/slices/apiSlice";
 import { IoInformationCircleOutline, IoStarOutline } from "react-icons/io5";
+import { useCreateBoardMutation, useUpdateBoardMutation } from "../redux/slices/apiSlice";
 
 interface BoardsSectionProps {
     boards: Board[],
@@ -15,23 +15,35 @@ interface SectionItemProps {
 }
 
 const SectionItem: React.FC<SectionItemProps> = ({ board }) => {
+    const [addBoardToFavorite] = useUpdateBoardMutation();
+    const onFavoriteIconClicked = async () => {
+        try {
+            addBoardToFavorite({
+                ...board, isFavorite: !board.isFavorite
+            });
+        }
+        catch (e) {
+            console.error(e)
+        }
+    }
+
     return (
         <div className="board-item">
             <Link to={`/board/${board.id}`} className="board-title link">
                 {board.title}
             </Link>
-            <IoStarOutline className={`board-item-icon ${board.isFavorite && "icon-favorite"}`} />
+            <IoStarOutline className={`board-item-icon ${board.isFavorite && "icon-favorite"}`} onClick={onFavoriteIconClicked} />
         </div>
     );
 }
 
 const NewBoardItem: React.FC = () => {
-    const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+    const [isNewBoardModalOpen, setNewBoardModalOpen] = useState<boolean>(false);
     const handleOpenModal = () => {
-        setIsModalOpen(true);
+        setNewBoardModalOpen(true);
     }
     const handleCloseModal = () => {
-        setIsModalOpen(false);
+        setNewBoardModalOpen(false);
     }
     const [createNewBoard] = useCreateBoardMutation();
     const [board, setBoard] = useState<Partial<Board>>({
@@ -53,13 +65,13 @@ const NewBoardItem: React.FC = () => {
         }
     }
 
-    return ( 
+    return (
         <>
             <div className="board-item" onClick={handleOpenModal} >
                 <h3 className="board-title">Create new board</h3>
                 <IoInformationCircleOutline className="board-item-icon icon-info" />
             </div>
-            <Modal visible={isModalOpen} title="Add new board" onClose={handleCloseModal}>
+            <Modal visible={isNewBoardModalOpen} title="Add new board" onClose={handleCloseModal}>
                 <form className="new-board-modal-form" onSubmit={(e) => onSubmitClicked(e)}>
                     <div className="form-group">
                         <label className="form-label">Board title</label>
@@ -89,8 +101,6 @@ const NewBoardItem: React.FC = () => {
 
 const filterBoards = (boards: Board[], type: SectionType): Board[] => {
     switch (type) {
-        case SectionType.RecentlyViewed:
-            return boards.filter(b => b.lastViewed != null);
         case SectionType.Favorite:
             return boards.filter(b => b.isFavorite);
         default:
@@ -98,24 +108,34 @@ const filterBoards = (boards: Board[], type: SectionType): Board[] => {
     }
 };
 
-
 const BoardsSection: React.FC<BoardsSectionProps> = ({ boards, type }) => {
     const filteredBoards = useMemo(() => filterBoards(boards, type), [boards, type]);
 
-    if (!filteredBoards.length) {
-        return null;
-    }
-    return (
-        <div className="boards-section">
-            <h2>{type}</h2>
-            <div className="boards-group">
-                {filteredBoards.map(board => (
-                    <SectionItem board={board} key={board.id} />
-                ))}
-                {type === SectionType.OwnBoards && <NewBoardItem />}
+    if (filteredBoards.length) {
+
+        return (
+            <div className="boards-section">
+                <h2>{type}</h2>
+                <div className="boards-group">
+                    {filteredBoards.map(board => (
+                        <SectionItem board={board} key={board.id} />
+                    ))}
+                    {type === SectionType.OwnBoards && <NewBoardItem />}
+                </div>
             </div>
-        </div>
-    );
+        );
+    }
+    else {
+        if (type == SectionType.OwnBoards)
+        return (
+            <div className="boards-section">
+                <h2>{type}</h2>
+                <div className="boards-group">
+                    <NewBoardItem />
+                </div>
+            </div>
+        );
+    }
 };
 
 export default BoardsSection;

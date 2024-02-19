@@ -8,9 +8,9 @@ import { IoStarOutline, IoLockClosedOutline, IoLockOpenOutline, IoClose } from "
 
 const BoardPage: React.FC = () => {
     const { boardId } = useParams<{ boardId: string }>();
-    const [isOpen, setIsOpen] = useState<boolean>(false);
+    const [isNewColumnDropdownOpen, setNewColumnDropdownOpen] = useState<boolean>(false);
     const togleDropdown = (state: boolean) => {
-        setIsOpen(state);
+        setNewColumnDropdownOpen(state);
     }
     const [column, setColumn] = useState<Partial<Column>>({
         title: "",
@@ -59,13 +59,13 @@ const BoardPage: React.FC = () => {
                     {board.columns?.map((col) => <ColumnItem column={col} key={col.id} />)}
                     <div className="new-column-item">
                         <input
-                            value={column.title}
                             className="new-col-input"
                             placeholder="Add a new column"
+                            value={column.title}
                             onFocus={() => togleDropdown(true)}
                             onChange={e => setColumn({ ...column, title: e.target.value })}
                         />
-                        {isOpen && (
+                        {isNewColumnDropdownOpen && (
                             <div className="save-section">
                                 <button className="save-btn" onClick={() => onSubmitClicked(board.id)}>Save</button>
                                 <IoClose className="icon-close" onClick={() => togleDropdown(false)} />

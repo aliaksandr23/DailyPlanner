@@ -1,4 +1,4 @@
-import { Board, Column, RequestTypes } from "../../types/types";
+import { Board, Card, Column, RequestTypes } from "../../types/types";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const apiSlice = createApi({
@@ -45,12 +45,13 @@ export const apiSlice = createApi({
             }),
             invalidatesTags: ["Board"],
         }),
-        updateBoard: builder.mutation({
-            query: (board) => ({
-                url: `/board${board.Id}`,
+        updateBoard: builder.mutation<Board, Partial<Board>>({
+            query: (updatedBoard) => ({
+                url: "/Board/Update",
                 method: RequestTypes.PATCH,
-                body: board
+                body: updatedBoard
             }),
+            invalidatesTags: ["Board"],
         }),
         deleteBoard: builder.mutation({
             query: (boardId) => ({
@@ -74,6 +75,14 @@ export const apiSlice = createApi({
                 body: column
             }),
             invalidatesTags: ["Column"],
+        }),
+        createCard: builder.mutation<Card, Partial<Card>>({
+            query: (newCard) => ({
+                url: "/Card/Create",
+                method: RequestTypes.POST,
+                body: newCard
+            }),
+            invalidatesTags: ["Column"],
         })
     }),
 });
@@ -82,7 +91,9 @@ export const {
     useGetBoardsQuery,
     useGetUserInfoQuery,
     useGetBoardByIdQuery,
+    useCreateCardMutation,
     useCreateBoardMutation,
+    useUpdateBoardMutation,
     useCreateColumnMutation,
-    useDeleteColumnMutation
+    useDeleteColumnMutation,
 } = apiSlice;

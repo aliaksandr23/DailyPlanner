@@ -19,20 +19,24 @@ export type Card = {
     title: string,
     isDone: boolean,
     description: string,
+    endDate: Date,
+    startDate: Date,
     priority: CardPriority,
     columnId: string,
 }
 
-type CardPriority = {
-    index: number,
-    value: string,
+export enum CardPriority {
+    None = "None",
+    Low = "Low",
+    Medium = "Medium",
+    High = "High"
 }
 
 export enum SectionType {
     Favorite = "Favorite",
     OwnBoards = "Own boards",
-    GuestBoards = "Guest boards",
-    RecentlyViewed = "Recentry Viewed",
+    //GuestBoards = "Guest boards",
+    //RecentlyViewed = "Recentry Viewed",
 }
 
 export enum RequestTypes {

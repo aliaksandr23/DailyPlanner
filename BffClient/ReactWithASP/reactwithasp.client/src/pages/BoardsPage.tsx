@@ -17,23 +17,15 @@ const BoardsPage: React.FC = () => {
     }
     else if (isError) {
         return (<Navigate to="/error" replace />);
-        
+
     }
     else if (isSuccess) {
         return (
             <div className="container">
-                <BoardsSection
-                    boards={boards}
-                    type={SectionType.RecentlyViewed}
-                />
-                <BoardsSection
-                    boards={boards}
-                    type={SectionType.Favorite}
-                />
-                <BoardsSection
-                    boards={boards}
-                    type={SectionType.OwnBoards}
-                />
+                {
+                    Object.values(SectionType).map((val) =>
+                        <BoardsSection boards={boards} type={val} key={val} />)
+                }
             </div>
         );
     }
