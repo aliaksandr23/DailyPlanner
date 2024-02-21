@@ -1,30 +1,16 @@
-import { useState } from "react";
-import { Card } from "../types/types";
-import { Modal } from "./UI/Modal/Modal";
+import { ICardViewData } from "../types/types";
 
-interface CardItemProps {
-    card: Card
+interface ICardItemProps {
+    card: ICardViewData,
+    openCardDetailsModal: (cardData: ICardViewData) => void,
 }
 
-const CardItem: React.FC<CardItemProps> = ({ card }) => {
-    const { title } = card;
-    const [isCardDataModalOpen, setCardDataModalOpen] = useState<boolean>(false);
-    const handleOpenModal = () => {
-        setCardDataModalOpen(true);
-    }
-    const handleCloseModal = () => {
-        setCardDataModalOpen(false);
-    }
-
+const CardItem: React.FC<ICardItemProps> = ({ card, openCardDetailsModal }) => {
     return (
-        <>
-            <li className="card-item" onClick={handleOpenModal}>
-                <h4 className="card-title">{title}</h4>
-                <h4 className="card-title">{card.id}</h4>
-            </li>
-            <Modal title={title} onClose={handleCloseModal} visible={isCardDataModalOpen}>
-            </Modal>
-        </>
+        <div className="card-item" onClick={() => openCardDetailsModal(card)}>
+            <h4 className="card-title">{card.title}</h4>
+            <h4 className="card-title">{card.id}</h4>
+        </div>
     );
 }
 

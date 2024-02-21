@@ -2,25 +2,27 @@ import { useState } from "react";
 import CardItem from "./CardItem";
 import { Modal } from "./UI/Modal/Modal";
 import { IoClose } from "react-icons/io5";
-import { Card, CardPriority, Column } from "../types/types";
+import { Card, CardPriority, Column, ICardViewData } from "../types/types";
 import { useDeleteColumnMutation, useCreateCardMutation } from "../redux/slices/apiSlice";
 
 interface ColumnItemProps {
     column: Column,
+    openCardDetailsModal: (cardData: ICardViewData) => void,
 }
 
-const ColumnItem: React.FC<ColumnItemProps> = ({ column }) => {
+const ColumnItem: React.FC<ColumnItemProps> = ({ column, openCardDetailsModal }) => {
     const [createCard] = useCreateCardMutation();
     const [deleteColumn] = useDeleteColumnMutation();
-    const [newCard, setNewCard] = useState<Partial<Card>>({
-        columnId: column.id,
+    const [isNewCardModalOpen, setNewCardModalOpen] = useState<boolean>(false);
+    const getInitialCardState = (columnId: string): Partial<Card> => ({
+        columnId,
         title: "",
         description: "",
         startDate: new Date(),
         endDate: new Date(),
         priority: CardPriority.None
     });
-    const [isNewCardModalOpen, setNewCardModalOpen] = useState<boolean>(false);
+    const [newCard, setNewCard] = useState<Partial<Card>>(getInitialCardState(column.id));
 
     const handleOpenModal = () => {
         setNewCardModalOpen(true);
@@ -29,14 +31,7 @@ const ColumnItem: React.FC<ColumnItemProps> = ({ column }) => {
         setNewCardModalOpen(false);
     }
     const resetCardState = () => {
-        setNewCard({
-            ...newCard,
-            title: "",
-            description: "",
-            startDate: new Date(),
-            endDate: new Date(),
-            priority: CardPriority.None
-        })
+        setNewCard(getInitialCardState(column.id));
     }
 
     const onDeleteColumnClicked = async () => {
@@ -46,7 +41,7 @@ const ColumnItem: React.FC<ColumnItemProps> = ({ column }) => {
         catch (e) {
             console.error(e);
             //add a pop-up window with an error and a request to try again
-        } 
+        }
     }
 
     const onCreateCardClicked = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -59,7 +54,7 @@ const ColumnItem: React.FC<ColumnItemProps> = ({ column }) => {
         catch (e) {
             console.error(e);
             //add a pop-up window with an error and a request to try again
-        } 
+        }
     }
 
     return (
@@ -68,13 +63,13 @@ const ColumnItem: React.FC<ColumnItemProps> = ({ column }) => {
                 <h3>{column.title}</h3>
                 <IoClose className="icon-delete" onClick={onDeleteColumnClicked} />
             </div>
-            <ul className="card-list">
-                {column.cards?.map((card) => <CardItem card={card} key={card.id} />)}
-            </ul>
+            <div className="card-section">
+                {column.cards?.map((card) => <CardItem card={{ ...card, columnTitle: column.title }} key={card.id} openCardDetailsModal={openCardDetailsModal} />)}
+            </div>
             <div className="column-footer">
                 <button className="new-card-btn" onClick={handleOpenModal}>Add new card</button>
                 <Modal title="New card" visible={isNewCardModalOpen} onClose={handleCloseModal}>
-                    <form className="new-board-modal-form" onSubmit={e => onCreateCardClicked(e)}>
+                    <form className="form" onSubmit={e => onCreateCardClicked(e)}>
                         <div className="form-group">
                             <label className="form-label">Title</label>
                             <input

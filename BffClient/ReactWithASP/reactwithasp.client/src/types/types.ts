@@ -25,6 +25,10 @@ export type Card = {
     columnId: string,
 }
 
+export interface ICardViewData extends Card {
+    columnTitle: string
+}
+
 export enum CardPriority {
     None = "None",
     Low = "Low",

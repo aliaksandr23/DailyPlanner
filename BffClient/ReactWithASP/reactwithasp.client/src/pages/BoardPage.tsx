@@ -1,41 +1,88 @@
 import { useState } from "react";
-import { Column } from "../types/types";
 import ColumnItem from "../components/ColumnItem";
+import { Modal } from "../components/UI/Modal/Modal";
+import { Column, ICardViewData } from "../types/types";
 import { Navigate, useParams } from "react-router-dom";
 import { Spinner } from "../components/UI/Spinner/Spinner";
 import { useCreateColumnMutation, useGetBoardByIdQuery } from "../redux/slices/apiSlice";
 import { IoStarOutline, IoLockClosedOutline, IoLockOpenOutline, IoClose } from "react-icons/io5";
 
+interface ICardDetailsModalProps {
+    isOpen: boolean,
+    card: ICardViewData | null,
+    onClose: () => void,
+}
+
+const formatDate = (date: string): string => {
+    const objDate = new Date(date);
+    const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const formattedDate = days[objDate.getDay()] + ' ' +
+        months[objDate.getMonth()] + ' ' +
+        ('0' + objDate.getDate()).slice(-2) + ' ' +
+        objDate.getFullYear() + ' ' +
+        ('0' + objDate.getHours()).slice(-2) + ':' +
+        ('0' + objDate.getMinutes()).slice(-2);
+    return formattedDate;
+}
+
+const CardDetailsModal: React.FC<ICardDetailsModalProps> = ({ card, isOpen, onClose }) => {
+    if (card) {
+        return (
+            <Modal title={card.title} onClose={onClose} visible={isOpen}>
+                <div className="view-group">
+                    <p className="view-label">In column: <i className="view-data">{card.columnTitle}</i></p>
+                    <p className="view-label">Priority: <i className="view-data">{card.priority}</i></p>
+                    {card.endDate && (
+                        <p className="view-label">Due date: <i className="view-data">{formatDate(card.endDate.toString())}</i></p>
+                    )}
+                    <p className="view-label">Description:</p>
+                    <textarea
+                        rows={3}
+                        readOnly
+                        value={card.description}
+                        className="view-textarea"
+                    />
+                </div>
+            </Modal>
+        );
+    }
+    return (
+        <Modal title="Error" onClose={onClose} visible={isOpen}>
+            <h2>Something went wrong</h2>
+        </Modal>
+    );
+}
+
 const BoardPage: React.FC = () => {
     const { boardId } = useParams<{ boardId: string }>();
     const [isNewColumnDropdownOpen, setNewColumnDropdownOpen] = useState<boolean>(false);
-    const togleDropdown = (state: boolean) => {
-        setNewColumnDropdownOpen(state);
-    }
-    const [column, setColumn] = useState<Partial<Column>>({
-        title: "",
-        boardId: ""
-    });
-    const {
-        data: board,
-        isLoading,
-        isSuccess,
-    } = useGetBoardByIdQuery(boardId);
+    const [isCardDetailsViewModalOpen, setCardDetailsViewModalOpen] = useState<boolean>(false);
+    const [column, setColumn] = useState<Partial<Column>>({ title: "", boardId: "" });
+    const { data: board, isLoading, isSuccess } = useGetBoardByIdQuery(boardId);
+    const [selectedCard, setSelectedCardData] = useState<ICardViewData | null>(null);
     const [createNewColumn] = useCreateColumnMutation();
-    const onSubmitClicked = async (boardId: string) => {
+
+    const handleSubmit = async () => {
         try {
-            await createNewColumn({ ...column, boardId: boardId });
-            setColumn({
-                title: "",
-                boardId: ""
-            });
-            togleDropdown(false);
+            await createNewColumn({ ...column, boardId });
+            setColumn({ title: "", boardId: "" });
+            setNewColumnDropdownOpen(false);
         }
         catch (e) {
             console.error(e);
         }
     }
-    
+
+    const handleOpenCardDetailsViewModal = (selectedCard: ICardViewData) => {
+        setSelectedCardData(selectedCard);
+        setCardDetailsViewModalOpen(true);
+    }
+
+    const handleCloseCardDetailsViewModal = () => {
+        setCardDetailsViewModalOpen(false);
+    }
+
     if (isLoading) {
         return (<Spinner />);
     }
@@ -56,29 +103,28 @@ const BoardPage: React.FC = () => {
                     </button>
                 </div>
                 <div className="columns-section">
-                    {board.columns?.map((col) => <ColumnItem column={col} key={col.id} />)}
+                    {board.columns?.map((col) => <ColumnItem column={col} key={col.id} openCardDetailsModal={handleOpenCardDetailsViewModal} />)}
                     <div className="new-column-item">
                         <input
                             className="new-col-input"
                             placeholder="Add a new column"
                             value={column.title}
-                            onFocus={() => togleDropdown(true)}
+                            onFocus={() => setNewColumnDropdownOpen(true)}
                             onChange={e => setColumn({ ...column, title: e.target.value })}
                         />
                         {isNewColumnDropdownOpen && (
                             <div className="save-section">
-                                <button className="save-btn" onClick={() => onSubmitClicked(board.id)}>Save</button>
-                                <IoClose className="icon-close" onClick={() => togleDropdown(false)} />
+                                <button className="save-btn" onClick={handleSubmit}>Save</button>
+                                <IoClose className="icon-close" onClick={() => setNewColumnDropdownOpen(false)} />
                             </div>
                         )}
                     </div>
                 </div>
+                <CardDetailsModal card={selectedCard} isOpen={isCardDetailsViewModalOpen} onClose={handleCloseCardDetailsViewModal} />
             </>
         );
     }
-    else {
-        return (<Navigate to="/error" replace />);
-    }
+    return (<Navigate to="/error" replace />);
 }
 
 export default BoardPage;

@@ -72,7 +72,7 @@ const NewBoardItem: React.FC = () => {
                 <IoInformationCircleOutline className="board-item-icon icon-info" />
             </div>
             <Modal visible={isNewBoardModalOpen} title="Add new board" onClose={handleCloseModal}>
-                <form className="new-board-modal-form" onSubmit={(e) => onSubmitClicked(e)}>
+                <form className="form" onSubmit={(e) => onSubmitClicked(e)}>
                     <div className="form-group">
                         <label className="form-label">Board title</label>
                         <input
@@ -112,7 +112,6 @@ const BoardsSection: React.FC<BoardsSectionProps> = ({ boards, type }) => {
     const filteredBoards = useMemo(() => filterBoards(boards, type), [boards, type]);
 
     if (filteredBoards.length) {
-
         return (
             <div className="boards-section">
                 <h2>{type}</h2>
@@ -126,15 +125,16 @@ const BoardsSection: React.FC<BoardsSectionProps> = ({ boards, type }) => {
         );
     }
     else {
-        if (type == SectionType.OwnBoards)
-        return (
-            <div className="boards-section">
-                <h2>{type}</h2>
-                <div className="boards-group">
-                    <NewBoardItem />
+        if (type == SectionType.OwnBoards) {
+            return (
+                <div className="boards-section">
+                    <h2>{type}</h2>
+                    <div className="boards-group">
+                        <NewBoardItem />
+                    </div>
                 </div>
-            </div>
-        );
+            );
+        }
     }
 };
 
