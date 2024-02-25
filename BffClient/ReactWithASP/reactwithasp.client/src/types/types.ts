@@ -3,7 +3,7 @@ export type Board = {
     title: string,
     isPrivate: boolean,
     isFavorite: boolean,
-    lastViewed: Date | null;
+    lastViewed: string,
     columns: Column[] | null,
 }
 
@@ -19,8 +19,8 @@ export type Card = {
     title: string,
     isDone: boolean,
     description: string,
-    endDate: Date,
-    startDate: Date,
+    endDate: string | null,
+    startDate: string | null,
     priority: CardPriority,
     columnId: string,
 }

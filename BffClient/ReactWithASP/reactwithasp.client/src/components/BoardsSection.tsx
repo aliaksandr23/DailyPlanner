@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { Modal } from "./UI/Modal/Modal";
 import { useMemo, useState } from "react";
 import { Board, SectionType } from "../types/types";
-import { IoInformationCircleOutline, IoStarOutline } from "react-icons/io5";
+import { IoClose, IoInformationCircleOutline, IoStarOutline } from "react-icons/io5";
 import { useCreateBoardMutation, useUpdateBoardMutation } from "../redux/slices/apiSlice";
 
 interface BoardsSectionProps {
@@ -50,7 +50,7 @@ const NewBoardItem: React.FC = () => {
         title: "",
         isPrivate: false,
     });
-    const onSubmitClicked = async (e: React.FormEvent<HTMLFormElement>) => {
+    const onCreateBoardClicked = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {
             createNewBoard(board);
@@ -72,28 +72,36 @@ const NewBoardItem: React.FC = () => {
                 <IoInformationCircleOutline className="board-item-icon icon-info" />
             </div>
             <Modal visible={isNewBoardModalOpen} title="Add new board" onClose={handleCloseModal}>
-                <form className="form" onSubmit={(e) => onSubmitClicked(e)}>
-                    <div className="form-group">
-                        <label className="form-label">Board title</label>
-                        <input
-                            type="text"
-                            placeholder="Title"
-                            className="form-input"
-                            value={board.title}
-                            onChange={e => setBoard({ ...board, title: e.target.value })}
-                        />
-                    </div>
-                    <div className="form-group">
-                        <label className="form-label">Private</label>
-                        <input
-                            type="checkbox"
-                            className="form-checkbox"
-                            checked={board.isPrivate}
-                            onChange={e => setBoard({ ...board, isPrivate: e.target.checked })}
-                        />
-                    </div>
-                    <button className="submit-btn" type="submit">Create</button>
-                </form>
+                <div className="modal-header">
+                    <h2>Add new board</h2>
+                    <IoClose className="close" onClick={handleCloseModal} />
+                </div>
+                <div className="modal-body">
+                    <form className="form" onSubmit={e => onCreateBoardClicked(e)}>
+                        <div className="form-group">
+                            <label className="form-label" htmlFor="title">Board title</label>
+                            <input
+                                id="title"
+                                type="text"
+                                placeholder="Title"
+                                className="form-input"
+                                value={board.title}
+                                onChange={e => setBoard({ ...board, title: e.target.value })}
+                            />
+                        </div>
+                        <div className="form-group">
+                            <label className="form-label" htmlFor="private">Private</label>
+                            <input
+                                id="private"
+                                type="checkbox"
+                                className="form-checkbox"
+                                checked={board.isPrivate}
+                                onChange={e => setBoard({ ...board, isPrivate: e.target.checked })}
+                            />
+                        </div>
+                        <button className="submit-btn" type="submit">Create</button>
+                    </form>
+                </div>
             </Modal>
         </>
     );

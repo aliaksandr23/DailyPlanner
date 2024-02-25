@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { format } from "date-fns";
 import ColumnItem from "../components/ColumnItem";
 import { Modal } from "../components/UI/Modal/Modal";
 import { Column, ICardViewData } from "../types/types";
@@ -13,36 +14,30 @@ interface ICardDetailsModalProps {
     onClose: () => void,
 }
 
-const formatDate = (date: string): string => {
-    const objDate = new Date(date);
-    const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    const formattedDate = days[objDate.getDay()] + ' ' +
-        months[objDate.getMonth()] + ' ' +
-        ('0' + objDate.getDate()).slice(-2) + ' ' +
-        objDate.getFullYear() + ' ' +
-        ('0' + objDate.getHours()).slice(-2) + ':' +
-        ('0' + objDate.getMinutes()).slice(-2);
-    return formattedDate;
-}
-
 const CardDetailsModal: React.FC<ICardDetailsModalProps> = ({ card, isOpen, onClose }) => {
     if (card) {
         return (
             <Modal title={card.title} onClose={onClose} visible={isOpen}>
-                <div className="view-group">
-                    <p className="view-label">In column: <i className="view-data">{card.columnTitle}</i></p>
-                    <p className="view-label">Priority: <i className="view-data">{card.priority}</i></p>
-                    {card.endDate && (
-                        <p className="view-label">Due date: <i className="view-data">{formatDate(card.endDate.toString())}</i></p>
-                    )}
-                    <p className="view-label">Description:</p>
-                    <textarea
-                        rows={3}
-                        readOnly
-                        value={card.description}
-                        className="view-textarea"
-                    />
+                <div className="modal-header">
+                    <h2>Add new board</h2>
+                    <IoClose className="close" onClick={onClose} />
+                </div>
+                <div className="modal-body">
+                    <div className="view-group">
+                        <p className="view-label">In column: <i className="view-data">{card.columnTitle}</i></p>
+                        <p className="view-label">Priority: <i className="view-data">{card.priority}</i></p>
+                        {card.endDate && (
+                            <p className="view-label">Due date: <i className="view-data">{format(new Date(card.endDate), "EEE MMM dd yyyy HH:mm")}</i></p>
+                        )}
+                        <p className="view-label">Description:</p>
+                        <textarea
+                            id="description"
+                            rows={3}
+                            readOnly
+                            value={card.description}
+                            className="view-textarea"
+                        />
+                    </div>
                 </div>
             </Modal>
         );
@@ -106,6 +101,7 @@ const BoardPage: React.FC = () => {
                     {board.columns?.map((col) => <ColumnItem column={col} key={col.id} openCardDetailsModal={handleOpenCardDetailsViewModal} />)}
                     <div className="new-column-item">
                         <input
+                            id="column-title"
                             className="new-col-input"
                             placeholder="Add a new column"
                             value={column.title}
