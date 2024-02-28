@@ -9,7 +9,8 @@ namespace DailyPlanner.Application.Validators.Boards
         public UpdateBoardCommandValidator()
         {
             RuleFor(b => b.Title)
-                .NotEmpty().WithMessage("Please enter board title")
+                .NotEmpty().When(b => b.Title is not null)
+                .WithMessage("Please enter board title")
                 .MaximumLength(EntitiesConfigurationConstants.MaxBoardTitleLength)
                 .WithMessage($"Board title must not exceed {EntitiesConfigurationConstants.MaxBoardTitleLength} characters");
         }

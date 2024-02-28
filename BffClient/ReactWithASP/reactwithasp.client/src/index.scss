@@ -21,7 +21,9 @@
     --yellow: #ffc107;
     --golden: #ffff00;
     --orange: #fd7e14;
-    --darkcyan: #008b8b;
+    --dark-cyan: #008b8b;
+    --dark-teal: #00353f; 
+    --turquoise-blue: #08c5d1;
     --shadow-grey: #00000035;
 }
 
@@ -48,10 +50,10 @@ body {
         display: flex;
         align-items: baseline;
 
+        .nav-brand,
         .nav-title {
-            padding: 1rem;
-            font-weight: 600;
-            font-size: 1.55rem;
+            margin: 0.5rem;
+            padding: 0.5rem;
         }
     }
 
@@ -109,7 +111,7 @@ body {
     .form {
         gap: 1rem;
         display: flex;
-        align-items: center;
+        align-items: start;
         flex-direction: column;
 
         .form-group {
@@ -130,7 +132,7 @@ body {
                 font-size: 1.25rem;
                 border-radius: 0.25rem;
                 padding: 0.375rem 0.75rem;
-                border: 1px solid var(--darkcyan);
+                border: 1px solid var(--dark-cyan);
                 transition: border-color .25s ease-in-out, box-shadow .25s ease-in-out;
 
                 &:focus {
@@ -144,21 +146,21 @@ body {
                 display: block;
                 width: 1.05rem;
                 height: 1.05rem;
-                accent-color: var(--darkcyan);
+                accent-color: var(--dark-cyan);
             }
         }
     }
 
     .submit-btn {
         @extend .btn;
+        gap: 0.5rem;
         font-size: 1.25rem;
-        align-self: flex-start;
         padding: 0.375rem 0.75rem;
-        border: 1px solid var(--darkcyan);
+        border: 1px solid var(--dark-cyan);
 
         &:hover {
             color: var(--white);
-            background-color: var(--darkcyan);
+            background-color: var(--dark-cyan);
         }
 
         &:active {
@@ -166,11 +168,26 @@ body {
         }
     }
 
-    .view-group {
+    .submit-btn.danger {
+        border: 1px solid var(--red);
+
+        &:hover {
+            background-color: var(--red);
+        }
+    }
+
+    .view {
         gap: 0.5rem;
-        width: 100%;
         display: flex;
+        align-items: start;
         flex-direction: column;
+
+        .view-group {
+            gap: 0.5rem;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+        }
 
         .view-label, .view-data {
             font-size: 1.25rem;
@@ -181,7 +198,7 @@ body {
             font-size: 1.25rem;
             border-radius: 0.25rem;
             padding: 0.375rem 0.75rem;
-            border: 1px solid var(--darkcyan);
+            border: 1px solid var(--dark-cyan);
             transition: border-color .25s ease-in-out, box-shadow .25s ease-in-out;
 
             &:focus {
@@ -216,11 +233,11 @@ body {
         padding: 0.75rem 0;
         align-items: center;
         justify-content: space-between;
-        border-bottom: 1px solid darkcyan;
+        border-bottom: 1px solid var(--dark-cyan);
 
         .close {
             cursor: pointer;
-            color: darkcyan;
+            color: var(--dark-cyan);
             font-size: 1.25rem;
             border-radius: 0.25rem;
             transition: transform 0.1s linear;
@@ -229,21 +246,43 @@ body {
         .close:hover {
             color: var(--white);
             transform: scale(1.2);
-            background-color: darkcyan;
+            background-color: var(--dark-cyan);
         }
 
         .close:active {
             box-shadow: inset 0 0 0 100em #105858;
         }
+
+        .header-title {
+            .board-title {
+                font-size: 1.25rem;
+            }
+        }
+    }
+
+    .modal-body {
+        .message {
+            font-size: 1.5rem;
+        }
+    }
+
+    .modal-footer {
+        display: flex;
+        gap: 1rem;
     }
 }
 
 .navbar {
     @extend .nav-container;
-    background-color: var(--darkcyan);
+    background-color: var(--dark-cyan);
 
     .brand-section {
         display: flex;
+
+        .nav-brand {
+            font-weight: 600;
+            font-size: 1.5rem;
+        }
     }
 
     .nav-section {
@@ -284,7 +323,7 @@ body {
             @extend .item;
             cursor: pointer;
             position: relative;
-            background: var(--darkcyan);
+            background: var(--dark-cyan);
             transition: transform 200ms linear;
 
             &:hover {
@@ -332,16 +371,27 @@ body {
     }
 }
 
-
 .board-navbar {
     @extend .nav-container;
     border-bottom: 0.125rem solid var(--grey-light);
 
-    .nav-btn {
-        gap: 0.5rem;
+    .board-title {
+        @extend .nav-title;
+
+        &:focus {
+            border-radius: 0.25rem;
+            outline: 3px solid var(--turquoise-blue);
+        }
+    }
+
+    button:last-child {
+        margin-left: auto;
+    }
+
+    .submit-btn .favorite path {
+        fill: var(--golden);
     }
 }
-
 .columns-section {
     display: grid;
     grid-gap: 1rem;
@@ -364,6 +414,15 @@ body {
             display: flex;
             align-items: center;
             justify-content: space-between;
+
+            .col-title {
+                padding: 0.15rem;
+
+                &:focus {
+                    border-radius: 0.25rem;
+                    outline: 3px solid var(--turquoise-blue);
+                }
+            }
         }
 
         .card-section {
@@ -416,7 +475,7 @@ body {
             font-size: 1.25rem;
             border-radius: 0.25rem;
             padding: 0.375rem 0.75rem;
-            border: 1px solid var(--darkcyan);
+            border: 1px solid var(--dark-cyan);
             transition: border-color .25s ease-in-out, box-shadow .25s ease-in-out;
 
             &:focus {
@@ -440,13 +499,13 @@ body {
 
     .icon-close, .icon-delete {
         cursor: pointer;
-        color: var(--darkcyan);
+        color: var(--dark-cyan);
         border-radius: 0.25rem;
         transition: transform 0.1s linear;
 
         &:hover {
             color: var(--white);
-            background-color: var(--darkcyan);
+            background-color: var(--dark-cyan);
             transform: scale(1.2);
         }
 

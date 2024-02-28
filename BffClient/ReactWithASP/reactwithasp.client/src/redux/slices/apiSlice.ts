@@ -35,7 +35,7 @@ export const apiSlice = createApi({
                 },
                 credentials: "include"
             }),
-            providesTags: ["Column"],
+            providesTags: ["Column", "Board"],
         }),
         createBoard: builder.mutation<Board, Partial<Board>>({
             query: (newBoard) => ({
@@ -59,6 +59,7 @@ export const apiSlice = createApi({
                 method: RequestTypes.DELETE,
                 body: boardId
             }),
+            invalidatesTags: ["Board"]
         }),
         createColumn: builder.mutation<Column, Partial<Column>>({
             query: (newColumn) => ({
@@ -76,11 +77,27 @@ export const apiSlice = createApi({
             }),
             invalidatesTags: ["Column"],
         }),
+        updateColumn: builder.mutation<void, Partial<Column>>({
+            query: (updatedColumn) => ({
+                url: "/Column/Update",
+                method:RequestTypes.PATCH,
+                body: updatedColumn,
+            }),
+            invalidatesTags: ["Board"],
+        }),
         createCard: builder.mutation<Card, Partial<Card>>({
             query: (newCard) => ({
                 url: "/Card/Create",
                 method: RequestTypes.POST,
                 body: newCard
+            }),
+            invalidatesTags: ["Column"],
+        }),
+        deleteCard: builder.mutation<void, { id: string, columnId: string }>({
+            query: (card) => ({
+                url: "/Card/Delete",
+                method: RequestTypes.DELETE,
+                body: card
             }),
             invalidatesTags: ["Column"],
         })
@@ -92,8 +109,11 @@ export const {
     useGetUserInfoQuery,
     useGetBoardByIdQuery,
     useCreateCardMutation,
+    useDeleteCardMutation,
+    useDeleteBoardMutation,
     useCreateBoardMutation,
     useUpdateBoardMutation,
     useCreateColumnMutation,
     useDeleteColumnMutation,
+    useUpdateColumnMutation,
 } = apiSlice;

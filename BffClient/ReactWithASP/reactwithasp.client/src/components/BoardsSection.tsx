@@ -5,59 +5,68 @@ import { Board, SectionType } from "../types/types";
 import { IoClose, IoInformationCircleOutline, IoStarOutline } from "react-icons/io5";
 import { useCreateBoardMutation, useUpdateBoardMutation } from "../redux/slices/apiSlice";
 
-interface BoardsSectionProps {
+interface IBoardsSectionProps {
     boards: Board[],
     type: SectionType,
 }
 
-interface SectionItemProps {
-    board: Board,
+interface ISectionItemProps {
+    board: Partial<Board>,
 }
 
-const SectionItem: React.FC<SectionItemProps> = ({ board }) => {
-    const [addBoardToFavorite] = useUpdateBoardMutation();
-    const onFavoriteIconClicked = async () => {
+const getNewBoardInitialState = (): Partial<Board> => ({ title: "", isPrivate: false })
+
+const filterBoards = (boards: Board[], type: SectionType): Board[] => {
+    switch (type) {
+        case SectionType.Favorite:
+            return boards.filter(b => b.isFavorite);
+        default:
+            return boards;
+    }
+};
+
+const SectionItem: React.FC<ISectionItemProps> = ({ board }) => {
+    const { id, isFavorite, title } = board;
+    const [UpdateBoardMutation] = useUpdateBoardMutation();
+
+    const handleUpdateBoardFavoriteMutation = async () => {
         try {
-            addBoardToFavorite({
-                ...board, isFavorite: !board.isFavorite
-            });
+            await UpdateBoardMutation({ id, isFavorite: !isFavorite });
         }
         catch (e) {
-            console.error(e)
+            console.error(e);
         }
     }
 
     return (
         <div className="board-item">
-            <Link to={`/board/${board.id}`} className="board-title link">
-                {board.title}
+            <Link to={`/board/${id}`} className="board-title link">
+                {title}
             </Link>
-            <IoStarOutline className={`board-item-icon ${board.isFavorite && "icon-favorite"}`} onClick={onFavoriteIconClicked} />
+            <IoStarOutline className={`board-item-icon ${isFavorite && "icon-favorite"}`} onClick={handleUpdateBoardFavoriteMutation} />
         </div>
     );
 }
 
 const NewBoardItem: React.FC = () => {
+    const [createBoardMutation] = useCreateBoardMutation();
+    const [board, setBoard] = useState<Partial<Board>>(getNewBoardInitialState);
     const [isNewBoardModalOpen, setNewBoardModalOpen] = useState<boolean>(false);
+
     const handleOpenModal = () => {
         setNewBoardModalOpen(true);
     }
+
     const handleCloseModal = () => {
         setNewBoardModalOpen(false);
     }
-    const [createNewBoard] = useCreateBoardMutation();
-    const [board, setBoard] = useState<Partial<Board>>({
-        title: "",
-        isPrivate: false,
-    });
-    const onCreateBoardClicked = async (e: React.FormEvent<HTMLFormElement>) => {
+
+    const handleCreateBoardMutation = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+
         try {
-            createNewBoard(board);
-            setBoard({
-                title: "",
-                isPrivate: false,
-            });
+            await createBoardMutation(board);
+            setBoard(getNewBoardInitialState);
             handleCloseModal();
         }
         catch (e) {
@@ -71,13 +80,13 @@ const NewBoardItem: React.FC = () => {
                 <h3 className="board-title">Create new board</h3>
                 <IoInformationCircleOutline className="board-item-icon icon-info" />
             </div>
-            <Modal visible={isNewBoardModalOpen} title="Add new board" onClose={handleCloseModal}>
+            <Modal isVisible={isNewBoardModalOpen} onClose={handleCloseModal}>
                 <div className="modal-header">
                     <h2>Add new board</h2>
                     <IoClose className="close" onClick={handleCloseModal} />
                 </div>
                 <div className="modal-body">
-                    <form className="form" onSubmit={e => onCreateBoardClicked(e)}>
+                    <form className="form" onSubmit={e => handleCreateBoardMutation(e)}>
                         <div className="form-group">
                             <label className="form-label" htmlFor="title">Board title</label>
                             <input
@@ -107,43 +116,20 @@ const NewBoardItem: React.FC = () => {
     );
 }
 
-const filterBoards = (boards: Board[], type: SectionType): Board[] => {
-    switch (type) {
-        case SectionType.Favorite:
-            return boards.filter(b => b.isFavorite);
-        default:
-            return boards;
-    }
-};
-
-const BoardsSection: React.FC<BoardsSectionProps> = ({ boards, type }) => {
+const BoardsSection: React.FC<IBoardsSectionProps> = ({ boards, type }) => {
     const filteredBoards = useMemo(() => filterBoards(boards, type), [boards, type]);
 
-    if (filteredBoards.length) {
-        return (
-            <div className="boards-section">
-                <h2>{type}</h2>
-                <div className="boards-group">
-                    {filteredBoards.map(board => (
-                        <SectionItem board={board} key={board.id} />
-                    ))}
-                    {type === SectionType.OwnBoards && <NewBoardItem />}
-                </div>
+    return (
+        <div className="boards-section">
+            <h2>{type}</h2>
+            <div className="boards-group">
+                {filteredBoards.map(board =>
+                    <SectionItem board={board} key={board.id} />
+                )}
+                {type === SectionType.OwnBoards && <NewBoardItem />}
             </div>
-        );
-    }
-    else {
-        if (type == SectionType.OwnBoards) {
-            return (
-                <div className="boards-section">
-                    <h2>{type}</h2>
-                    <div className="boards-group">
-                        <NewBoardItem />
-                    </div>
-                </div>
-            );
-        }
-    }
+        </div>
+    );
 };
 
 export default BoardsSection;

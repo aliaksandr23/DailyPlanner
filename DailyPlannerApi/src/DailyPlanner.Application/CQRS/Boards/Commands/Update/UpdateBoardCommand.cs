@@ -7,7 +7,7 @@ namespace DailyPlanner.Application.CQRS.Boards.Commands.Update
     {
         public Guid Id { get; init; }
         public string Title { get; init; }
-        public bool IsPrivate { get; init; }
-        public bool IsFavorite { get; init; }
+        public bool? IsPrivate { get; init; } = null;
+        public bool? IsFavorite { get; init; } = null;
     }
 }

@@ -1,42 +1,42 @@
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import CardItem from "./CardItem";
 import { Modal } from "./UI/Modal/Modal";
 import { IoClose } from "react-icons/io5";
 import { Card, CardPriority, Column, ICardViewData } from "../types/types";
-import { useDeleteColumnMutation, useCreateCardMutation } from "../redux/slices/apiSlice";
+import { useDeleteColumnMutation, useCreateCardMutation, useUpdateColumnMutation } from "../redux/slices/apiSlice";
 
-interface ColumnItemProps {
+interface IColumnItemProps {
     column: Column,
-    openCardDetailsModal: (cardData: ICardViewData) => void,
+    cardDetailsViewModalHandler: (cardData: ICardViewData) => void,
 }
 
-const ColumnItem: React.FC<ColumnItemProps> = ({ column, openCardDetailsModal }) => {
-    const [createCard] = useCreateCardMutation();
-    const [deleteColumn] = useDeleteColumnMutation();
+const getNewCardInitialState = (): Partial<Card> => ({
+    title: "",
+    description: "",
+    startDate: null,
+    endDate: null,
+    priority: CardPriority.None
+});
+
+const ColumnItem: React.FC<IColumnItemProps> = ({ column, cardDetailsViewModalHandler }) => {
+    const { id, boardId, title, cards } = column;
+    const [createCardMutation] = useCreateCardMutation();
+    const [updateColumnMutation] = useUpdateColumnMutation();
+    const [deleteColumnMutation] = useDeleteColumnMutation();
     const [isNewCardModalOpen, setNewCardModalOpen] = useState<boolean>(false);
-    const getInitialCardState = (columnId: string): Partial<Card> => ({
-        columnId,
-        title: "",
-        description: "",
-        startDate: null,
-        endDate: null,
-        priority: CardPriority.None
-    });
-    const [newCard, setNewCard] = useState<Partial<Card>>(getInitialCardState(column.id));
+    const [newCard, setNewCard] = useState<Partial<Card>>({...getNewCardInitialState, columnId: column.id});
 
     const handleOpenModal = () => {
         setNewCardModalOpen(true);
     }
+
     const handleCloseModal = () => {
         setNewCardModalOpen(false);
     }
-    const resetCardState = () => {
-        setNewCard(getInitialCardState(column.id));
-    }
 
-    const onDeleteColumnClicked = async () => {
+    const handleDeleteColumnMutation = async () => {
         try {
-            await deleteColumn({ id: column.id, boardId: column.boardId });
+            await deleteColumnMutation({ id: column.id, boardId: column.boardId });
         }
         catch (e) {
             console.error(e);
@@ -44,12 +44,24 @@ const ColumnItem: React.FC<ColumnItemProps> = ({ column, openCardDetailsModal })
         }
     }
 
-    const onCreateCardClicked = async (e: React.FormEvent<HTMLFormElement>) => {
+    const handleUpdateColumnTitleMutation = async (e: ChangeEvent<HTMLHeadingElement>) => {
+        const newColumnTitle = e.target.innerText
+        if (newColumnTitle !== title) {
+            try {
+                await updateColumnMutation({ id, boardId, title: newColumnTitle });
+            }
+            catch (e) {
+                console.error(e);
+            }
+        }
+    };
+
+    const handleCreateCardMutation = async (e: React.FormEvent<HTMLFormElement>) => {
         try {
             e.preventDefault();
-            await createCard(newCard);
-            resetCardState();
+            await createCardMutation(newCard);
             handleCloseModal();
+            setNewCard(getNewCardInitialState);
         }
         catch (e) {
             console.error(e);
@@ -60,21 +72,32 @@ const ColumnItem: React.FC<ColumnItemProps> = ({ column, openCardDetailsModal })
     return (
         <div className="column-item">
             <div className="column-header">
-                <h3>{column.title}</h3>
-                <IoClose className="icon-delete" onClick={onDeleteColumnClicked} />
+                <h3
+                    className="col-title"
+                    contentEditable={true}
+                    suppressContentEditableWarning={true}
+                    onBlur={handleUpdateColumnTitleMutation}
+                >{title}</h3>
+                <IoClose className="icon-delete" onClick={handleDeleteColumnMutation} />
             </div>
             <div className="card-section">
-                {column.cards?.map((card) => <CardItem card={{ ...card, columnTitle: column.title }} key={card.id} openCardDetailsModal={openCardDetailsModal} />)}
+                {cards?.map((card) =>
+                    <CardItem
+                        key={card.id}
+                        card={{ ...card, columnTitle: title }}
+                        cardDetailsViewModalHandler={cardDetailsViewModalHandler}
+                    />
+                )}
             </div>
             <div className="column-footer">
                 <button className="new-card-btn" onClick={handleOpenModal}>Add new card</button>
-                <Modal title="New card" visible={isNewCardModalOpen} onClose={handleCloseModal}>
+                <Modal isVisible={isNewCardModalOpen} onClose={handleCloseModal}>
                     <div className="modal-header">
-                        <h2>Add new board</h2>
+                        <h2>Add new card</h2>
                         <IoClose className="close" onClick={handleCloseModal} />
                     </div>
                     <div className="modal-body">
-                        <form className="form" onSubmit={e => onCreateCardClicked(e)}>
+                        <form className="form" onSubmit={e => handleCreateCardMutation(e)}>
                             <div className="form-group">
                                 <label className="form-label" htmlFor="card-title">Title</label>
                                 <input

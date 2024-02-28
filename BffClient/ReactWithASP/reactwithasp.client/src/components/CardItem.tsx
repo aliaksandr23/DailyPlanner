@@ -1,23 +1,22 @@
-import { format, parseISO, isAfter } from "date-fns";
 import { ICardViewData } from "../types/types";
 import { IoTimeOutline } from "react-icons/io5";
+import { format, parseISO, isAfter } from "date-fns";
 
 interface ICardItemProps {
     card: ICardViewData,
-    openCardDetailsModal: (cardData: ICardViewData) => void,
+    cardDetailsViewModalHandler: (cardData: ICardViewData) => void,
 }
 
 interface ITimeSectionProps {
-    startDate: string | null;
-    endDate: string | null;
+    startDate: string | null,
+    endDate: string | null,
 }
 
 const isExpired = (endDate: string | null): boolean => {
     if (!endDate) {
         return false;
     }
-    const convertedDate = parseISO(endDate);
-    return isAfter(new Date(), convertedDate);
+    return isAfter(new Date(), parseISO(endDate));
 }
 
 const TimeSection: React.FC<ITimeSectionProps> = ({ startDate, endDate }) => {
@@ -36,11 +35,13 @@ const TimeSection: React.FC<ITimeSectionProps> = ({ startDate, endDate }) => {
     );
 }
 
-const CardItem: React.FC<ICardItemProps> = ({ card, openCardDetailsModal }) => {
+const CardItem: React.FC<ICardItemProps> = ({ card, cardDetailsViewModalHandler }) => {
+    const { title, startDate, endDate } = card;
+
     return (
-        <div className="card-item" onClick={() => openCardDetailsModal(card)}>
-            <h3 className="card-title">{card.title}</h3>
-            <TimeSection startDate={card.startDate} endDate={card.endDate} />
+        <div className="card-item" onClick={() => cardDetailsViewModalHandler(card)}>
+            <h3 className="card-title">{title}</h3>
+            <TimeSection startDate={startDate} endDate={endDate} />
         </div>
     );
 }
