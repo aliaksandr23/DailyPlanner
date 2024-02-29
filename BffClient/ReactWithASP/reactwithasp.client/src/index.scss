@@ -225,8 +225,13 @@ body {
         @extend .badge;
         color: var(--black);
         background-color: var(--red);
-    }
+    } 
 
+    .badge-warning {
+        @extend .badge;
+        color: var(--black);
+        background-color: var(--yellow);
+    }
 
     .modal-header {
         display: flex;
@@ -253,9 +258,12 @@ body {
             box-shadow: inset 0 0 0 100em #105858;
         }
 
-        .header-title {
-            .board-title {
-                font-size: 1.25rem;
+        .card-title {
+            padding: 0.25rem;
+
+            &:focus {
+                border-radius: 0.25rem;
+                outline: 3px solid var(--turquoise-blue);
             }
         }
     }
@@ -267,8 +275,8 @@ body {
     }
 
     .modal-footer {
-        display: flex;
         gap: 1rem;
+        display: flex;
     }
 }
 

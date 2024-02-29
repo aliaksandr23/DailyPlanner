@@ -1,6 +1,6 @@
 import { ICardViewData } from "../types/types";
 import { IoTimeOutline } from "react-icons/io5";
-import { format, parseISO, isAfter } from "date-fns";
+import { format, parseISO, isAfter, differenceInHours } from "date-fns";
 
 interface ICardItemProps {
     card: ICardViewData,
@@ -12,11 +12,18 @@ interface ITimeSectionProps {
     endDate: string | null,
 }
 
-const isExpired = (endDate: string | null): boolean => {
-    if (!endDate) {
-        return false;
+const TimeBadge: React.FC<{ endDate: string }> = ({ endDate }) => {
+    const endDateObj = parseISO(endDate);
+    const currentDateObj = new Date();
+
+    if (isAfter(currentDateObj, endDateObj)) {
+        return <span className="badge-danger">expired</span>
     }
-    return isAfter(new Date(), parseISO(endDate));
+    else if (differenceInHours(endDateObj, currentDateObj) <= 24) {
+        return <span className="badge-warning">due soon</span>
+    }
+
+    return null;
 }
 
 const TimeSection: React.FC<ITimeSectionProps> = ({ startDate, endDate }) => {
@@ -30,7 +37,7 @@ const TimeSection: React.FC<ITimeSectionProps> = ({ startDate, endDate }) => {
     return (
         <div className="date-section">
             <div className="date"><IoTimeOutline /> {formattedStartDate} {startDate && endDate && '-'} {formattedEndDate}</div>
-            {isExpired(endDate) && (<span className="badge-danger">expired</span>)}
+            {(endDate) && <TimeBadge endDate={endDate} />}
         </div>
     );
 }

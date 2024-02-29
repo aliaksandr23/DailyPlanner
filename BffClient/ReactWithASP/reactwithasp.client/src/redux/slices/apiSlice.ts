@@ -80,7 +80,7 @@ export const apiSlice = createApi({
         updateColumn: builder.mutation<void, Partial<Column>>({
             query: (updatedColumn) => ({
                 url: "/Column/Update",
-                method:RequestTypes.PATCH,
+                method: RequestTypes.PATCH,
                 body: updatedColumn,
             }),
             invalidatesTags: ["Board"],
@@ -100,6 +100,14 @@ export const apiSlice = createApi({
                 body: card
             }),
             invalidatesTags: ["Column"],
+        }),
+        updateCard: builder.mutation<void, Partial<Card>>({
+            query: (updatedCard) => ({
+                url: "/Card/Update",
+                method: RequestTypes.PATCH,
+                body: updatedCard,
+            }),
+            invalidatesTags: ["Board", "Column"],
         })
     }),
 });
@@ -110,6 +118,7 @@ export const {
     useGetBoardByIdQuery,
     useCreateCardMutation,
     useDeleteCardMutation,
+    useUpdateCardMutation,
     useDeleteBoardMutation,
     useCreateBoardMutation,
     useUpdateBoardMutation,

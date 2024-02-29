@@ -24,7 +24,7 @@ const ColumnItem: React.FC<IColumnItemProps> = ({ column, cardDetailsViewModalHa
     const [updateColumnMutation] = useUpdateColumnMutation();
     const [deleteColumnMutation] = useDeleteColumnMutation();
     const [isNewCardModalOpen, setNewCardModalOpen] = useState<boolean>(false);
-    const [newCard, setNewCard] = useState<Partial<Card>>({...getNewCardInitialState, columnId: column.id});
+    const [newCard, setNewCard] = useState<Partial<Card>>({ ...getNewCardInitialState(), columnId: id });
 
     const handleOpenModal = () => {
         setNewCardModalOpen(true);

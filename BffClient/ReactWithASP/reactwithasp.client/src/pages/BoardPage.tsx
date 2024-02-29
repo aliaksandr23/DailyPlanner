@@ -6,7 +6,7 @@ import { Spinner } from "../components/UI/Spinner/Spinner";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { CardPriority, Column, ICardViewData } from "../types/types";
 import { IoStarOutline, IoLockClosedOutline, IoLockOpenOutline, IoClose, IoTrashOutline } from "react-icons/io5";
-import { useCreateColumnMutation, useDeleteBoardMutation, useDeleteCardMutation, useGetBoardByIdQuery, useUpdateBoardMutation } from "../redux/slices/apiSlice";
+import { useCreateColumnMutation, useDeleteBoardMutation, useDeleteCardMutation, useGetBoardByIdQuery, useUpdateBoardMutation, useUpdateCardMutation } from "../redux/slices/apiSlice";
 
 interface ICardDetailsModalProps {
     isVisible: boolean,
@@ -28,12 +28,24 @@ const initialCardData: Partial<ICardViewData> = {
     startDate: "",
     priority: CardPriority.None,
     columnTitle: "",
-    columnId: "",
 }
 
 const CardDetailsModal: React.FC<ICardDetailsModalProps> = ({ card, isVisible, onClose }) => {
-    const { id, columnId, columnTitle, description, priority, endDate } = card
+    const { id, title, columnId, columnTitle, description, priority, endDate } = card
+    const [updateCardMutation] = useUpdateCardMutation()
     const [deleteCardMutation] = useDeleteCardMutation();
+
+    const handleUpdateCardTitleMutation = async (e: ChangeEvent<HTMLHeadingElement>) => {
+        const newCardTitle = e.target.innerText
+        if (newCardTitle !== title) {
+            try {
+                await updateCardMutation({ id, columnId, title: newCardTitle });
+            }
+            catch (e) {
+                console.error(e);
+            }
+        }
+    }
 
     const handleDeleteCardMutation = async () => {
         try {
@@ -50,7 +62,14 @@ const CardDetailsModal: React.FC<ICardDetailsModalProps> = ({ card, isVisible, o
         return (
             <Modal onClose={onClose} isVisible={isVisible}>
                 <div className="modal-header">
-                    <h2>Add new board</h2>
+                    <h2
+                        className="card-title"
+                        contentEditable={true}
+                        onBlur={handleUpdateCardTitleMutation}
+                        suppressContentEditableWarning={true}
+                    >
+                        {title}
+                    </h2>
                     <IoClose className="close" onClick={onClose} />
                 </div>
                 <div className="modal-body">
