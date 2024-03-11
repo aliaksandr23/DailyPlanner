@@ -12,11 +12,26 @@ namespace DailyPlanner.Infrastructure.Repositories
         public CardRepository(DailyPlannerDbContext context, IUserService userService)
             : base(context, userService) { }
 
-        public async Task<Card> GetCardByIdAsync(Guid id, Guid columnId, CancellationToken cancellationToken)
+        public async Task<Card> GetCardByIdAsync(Guid id, Guid boardId, CancellationToken cancellationToken)
         {
-            var card = await DbSet.FirstOrDefaultAsync(c => c.Id == id 
-                && c.ColumnId == columnId, cancellationToken);
-            return card ?? throw new EntityNotFoundException(typeof(Card));
+            return await DbSet.Include(c => c.Column).Where(c => c.Id == id
+            && c.Column.BoardId == boardId).Select(c => new Card
+            {
+                Id = c.Id,
+                Title = c.Title,
+                Description = c.Description,
+                IsDone = c.IsDone,
+                Priority = c.Priority,
+                EndDate = c.EndDate,
+                StartDate = c.StartDate,
+                CreatedOn = c.CreatedOn,
+                CreatedBy = c.CreatedBy,
+                UpdatedOn = c.UpdatedOn,
+                UpdatedBy = c.UpdatedBy,
+                ColumnId = c.ColumnId,
+                Column = c.Column,
+            }).FirstOrDefaultAsync(cancellationToken)
+            ?? throw new EntityNotFoundException(typeof(Card));
         }
     }
 }

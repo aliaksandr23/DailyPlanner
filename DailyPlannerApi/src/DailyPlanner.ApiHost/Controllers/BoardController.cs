@@ -1,7 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using DailyPlanner.Application.Common.DTO;
-using DailyPlanner.Infrastructure.Services.User;
 using DailyPlanner.Application.CQRS.Boards.Queries.GetAll;
 using DailyPlanner.Application.CQRS.Boards.Commands.Create;
 using DailyPlanner.Application.CQRS.Boards.Commands.Delete;
@@ -12,8 +11,7 @@ namespace DailyPlanner.ApiHost.Controllers
 {
     public class BoardController : BaseController
     {
-        public BoardController(IUserService userService, ISender sender)
-            : base(userService, sender) { }
+        public BoardController(ISender sender) : base(sender) { }
 
         [HttpGet("[action]")]
         public async Task<ActionResult<BoardDto>> GetById(Guid id)

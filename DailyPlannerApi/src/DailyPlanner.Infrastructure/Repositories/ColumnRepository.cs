@@ -14,9 +14,9 @@ namespace DailyPlanner.Infrastructure.Repositories
 
         public async Task<Column> GetColumnByIdAsync(Guid id, Guid boardId, CancellationToken cancellationToken)
         {
-            var column = await DbSet.FirstOrDefaultAsync(c => c.Id == id 
-                && c.BoardId == boardId, cancellationToken);
-            return column ?? throw new EntityNotFoundException(typeof(Column));
+            return await DbSet.FirstOrDefaultAsync(c => c.Id == id
+            && c.BoardId == boardId, cancellationToken)
+            ?? throw new EntityNotFoundException(typeof(Column));
         }
     }
 }
