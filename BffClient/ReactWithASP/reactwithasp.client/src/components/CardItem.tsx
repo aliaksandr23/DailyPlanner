@@ -1,10 +1,11 @@
-import { ICardViewData } from "../types/types";
+import { Card } from "../types/types";
+import { Link } from "react-router-dom";
 import { IoTimeOutline } from "react-icons/io5";
 import { format, parseISO, isAfter, differenceInHours } from "date-fns";
 
 interface ICardItemProps {
-    card: ICardViewData,
-    cardDetailsViewModalHandler: (cardData: ICardViewData) => void,
+    card: Card,
+    boardId: string,
 }
 
 interface ITimeSectionProps {
@@ -42,14 +43,16 @@ const TimeSection: React.FC<ITimeSectionProps> = ({ startDate, endDate }) => {
     );
 }
 
-const CardItem: React.FC<ICardItemProps> = ({ card, cardDetailsViewModalHandler }) => {
-    const { title, startDate, endDate } = card;
+const CardItem: React.FC<ICardItemProps> = ({ card, boardId }) => {
+    const { id, title, startDate, endDate } = card;
 
     return (
-        <div className="card-item" onClick={() => cardDetailsViewModalHandler(card)}>
-            <h3 className="card-title">{title}</h3>
-            <TimeSection startDate={startDate} endDate={endDate} />
-        </div>
+        <Link to={`/board/${boardId}/card/${id}`} className="board-title link">
+            <div className="card-item">
+                <h3 className="card-title">{title}</h3>
+                <TimeSection startDate={startDate} endDate={endDate} />
+            </div>
+        </Link>
     );
 }
 

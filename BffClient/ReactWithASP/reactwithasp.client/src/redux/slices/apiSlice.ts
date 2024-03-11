@@ -1,5 +1,21 @@
-import { Board, Card, Column, RequestTypes } from "../../types/types";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import {
+    Board,
+    Card,
+    Column,
+    RequestTypes,
+    IGetBoardByIdCommand,
+    ICreateBoardCommand,
+    IUpdateBoardCommand,
+    IDeleteBoardCommand,
+    ICreateColumnCommand,
+    IDeleteColumnCommand,
+    IUpdateColumnCommand,
+    ICreateCardCommand,
+    IDeleteCardCommand,
+    IUpdateCardCommand,
+    IGetCardByIdCommand
+} from "../../types/types";
 
 export const apiSlice = createApi({
     reducerPath: "dailyPlannerApi",
@@ -22,107 +38,117 @@ export const apiSlice = createApi({
             query: () => ({
                 url: "/Board/GetAll",
                 method: RequestTypes.GET,
-                credentials: "include"
             }),
             providesTags: ["Board"],
         }),
-        getBoardById: builder.query<Board, string>({
-            query: (id) => ({
+        getBoardById: builder.query<Board, IGetBoardByIdCommand>({
+            query: (getBoardByIdCommand) => ({
                 url: "/Board/GetById",
                 method: RequestTypes.GET,
                 params: {
-                    id
+                    id: getBoardByIdCommand.id
                 },
-                credentials: "include"
             }),
             providesTags: ["Column", "Board"],
         }),
-        createBoard: builder.mutation<Board, Partial<Board>>({
-            query: (newBoard) => ({
+        createBoard: builder.mutation<Board, ICreateBoardCommand>({
+            query: (createBoardCommand) => ({
                 url: "/Board/Create",
                 method: RequestTypes.POST,
-                body: newBoard
+                body: createBoardCommand
             }),
             invalidatesTags: ["Board"],
         }),
-        updateBoard: builder.mutation<Board, Partial<Board>>({
-            query: (updatedBoard) => ({
+        updateBoard: builder.mutation<Board, IUpdateBoardCommand>({
+            query: (updateBoardCommand) => ({
                 url: "/Board/Update",
                 method: RequestTypes.PATCH,
-                body: updatedBoard
+                body: updateBoardCommand
             }),
             invalidatesTags: ["Board"],
         }),
-        deleteBoard: builder.mutation({
-            query: (boardId) => ({
+        deleteBoard: builder.mutation<void, IDeleteBoardCommand>({
+            query: (deleteBoardCommand) => ({
                 url: "/Board/Delete",
                 method: RequestTypes.DELETE,
-                body: boardId
+                body: deleteBoardCommand
             }),
             invalidatesTags: ["Board"]
         }),
-        createColumn: builder.mutation<Column, Partial<Column>>({
-            query: (newColumn) => ({
+        createColumn: builder.mutation<Column, ICreateColumnCommand>({
+            query: (createColumnCommand) => ({
                 url: "/Column/Create",
                 method: RequestTypes.POST,
-                body: newColumn
+                body: createColumnCommand
             }),
             invalidatesTags: ["Column"],
         }),
-        deleteColumn: builder.mutation<void, { id: string, boardId: string }>({
-            query: (column) => ({
+        deleteColumn: builder.mutation<void, IDeleteColumnCommand>({
+            query: (deleteColumnCommand) => ({
                 url: "/Column/Delete",
                 method: RequestTypes.DELETE,
-                body: column
+                body: deleteColumnCommand
             }),
             invalidatesTags: ["Column"],
         }),
-        updateColumn: builder.mutation<void, Partial<Column>>({
-            query: (updatedColumn) => ({
+        updateColumn: builder.mutation<void, IUpdateColumnCommand>({
+            query: (updateColumnCommand) => ({
                 url: "/Column/Update",
                 method: RequestTypes.PATCH,
-                body: updatedColumn,
+                body: updateColumnCommand,
             }),
             invalidatesTags: ["Board"],
         }),
-        createCard: builder.mutation<Card, Partial<Card>>({
-            query: (newCard) => ({
+        createCard: builder.mutation<Card, ICreateCardCommand>({
+            query: (createCardCommand) => ({
                 url: "/Card/Create",
                 method: RequestTypes.POST,
-                body: newCard
+                body: createCardCommand
             }),
             invalidatesTags: ["Column"],
         }),
-        deleteCard: builder.mutation<void, { id: string, columnId: string }>({
-            query: (card) => ({
+        deleteCard: builder.mutation<void, IDeleteCardCommand>({
+            query: (deleteCardCommand) => ({
                 url: "/Card/Delete",
                 method: RequestTypes.DELETE,
-                body: card
+                body: deleteCardCommand
             }),
             invalidatesTags: ["Column"],
         }),
-        updateCard: builder.mutation<void, Partial<Card>>({
-            query: (updatedCard) => ({
+        updateCard: builder.mutation<void, IUpdateCardCommand>({
+            query: (updateCardCommand) => ({
                 url: "/Card/Update",
                 method: RequestTypes.PATCH,
-                body: updatedCard,
+                body: updateCardCommand,
             }),
             invalidatesTags: ["Board", "Column"],
-        })
+        }),
+        getCardById: builder.query<Card, IGetCardByIdCommand>({
+            query: (getCardByIdCommand) => ({
+                url: "/Card/GetById",
+                method: RequestTypes.GET,
+                params: {
+                    id: getCardByIdCommand.id,
+                    boardId: getCardByIdCommand.boardId
+                },
+            }),
+            providesTags: ["Column", "Board"],
+        }),
     }),
 });
 
 export const {
-    useGetBoardsQuery,
     useGetUserInfoQuery,
+    useGetBoardsQuery,
     useGetBoardByIdQuery,
-    useCreateCardMutation,
-    useDeleteCardMutation,
-    useUpdateCardMutation,
     useDeleteBoardMutation,
     useCreateBoardMutation,
     useUpdateBoardMutation,
     useCreateColumnMutation,
     useDeleteColumnMutation,
     useUpdateColumnMutation,
+    useGetCardByIdQuery,
+    useCreateCardMutation,
+    useDeleteCardMutation,
+    useUpdateCardMutation,
 } = apiSlice;

@@ -1,30 +1,28 @@
-import { ChangeEvent, useState } from "react";
 import CardItem from "./CardItem";
 import { Modal } from "./UI/Modal/Modal";
 import { IoClose } from "react-icons/io5";
-import { Card, CardPriority, Column, ICardViewData } from "../types/types";
+import { ChangeEvent, useState } from "react";
+import { CardPriority, Column, ICreateCardCommand } from "../types/types";
 import { useDeleteColumnMutation, useCreateCardMutation, useUpdateColumnMutation } from "../redux/slices/apiSlice";
 
 interface IColumnItemProps {
     column: Column,
-    cardDetailsViewModalHandler: (cardData: ICardViewData) => void,
 }
 
-const getNewCardInitialState = (): Partial<Card> => ({
-    title: "",
-    description: "",
-    startDate: null,
-    endDate: null,
-    priority: CardPriority.None
-});
-
-const ColumnItem: React.FC<IColumnItemProps> = ({ column, cardDetailsViewModalHandler }) => {
+const ColumnItem: React.FC<IColumnItemProps> = ({ column }) => {
     const { id, boardId, title, cards } = column;
     const [createCardMutation] = useCreateCardMutation();
     const [updateColumnMutation] = useUpdateColumnMutation();
     const [deleteColumnMutation] = useDeleteColumnMutation();
     const [isNewCardModalOpen, setNewCardModalOpen] = useState<boolean>(false);
-    const [newCard, setNewCard] = useState<Partial<Card>>({ ...getNewCardInitialState(), columnId: id });
+    const [newCard, setNewCard] = useState<ICreateCardCommand>({
+        title: "",
+        description: "",
+        startDate: null,
+        endDate: null,
+        priority: CardPriority.None,
+        columnId: id,
+    });
 
     const handleOpenModal = () => {
         setNewCardModalOpen(true);
@@ -36,11 +34,10 @@ const ColumnItem: React.FC<IColumnItemProps> = ({ column, cardDetailsViewModalHa
 
     const handleDeleteColumnMutation = async () => {
         try {
-            await deleteColumnMutation({ id: column.id, boardId: column.boardId });
+            await deleteColumnMutation({ id, boardId });
         }
         catch (e) {
             console.error(e);
-            //add a pop-up window with an error and a request to try again
         }
     }
 
@@ -57,15 +54,21 @@ const ColumnItem: React.FC<IColumnItemProps> = ({ column, cardDetailsViewModalHa
     };
 
     const handleCreateCardMutation = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
         try {
-            e.preventDefault();
             await createCardMutation(newCard);
             handleCloseModal();
-            setNewCard(getNewCardInitialState);
+            setNewCard({
+                ...newCard,
+                title: "",
+                description: "",
+                startDate: null,
+                endDate: null,
+                priority: CardPriority.None,
+            });
         }
         catch (e) {
             console.error(e);
-            //add a pop-up window with an error and a request to try again
         }
     }
 
@@ -84,8 +87,8 @@ const ColumnItem: React.FC<IColumnItemProps> = ({ column, cardDetailsViewModalHa
                 {cards?.map((card) =>
                     <CardItem
                         key={card.id}
-                        card={{ ...card, columnTitle: title }}
-                        cardDetailsViewModalHandler={cardDetailsViewModalHandler}
+                        card={card}
+                        boardId={column.boardId}
                     />
                 )}
             </div>

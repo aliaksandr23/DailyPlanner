@@ -4,6 +4,7 @@ import BoardPage from "./pages/BoardPage";
 import RootLayout from "./pages/RootLayout";
 import BoardsPage from "./pages/BoardsPage";
 import { createBrowserRouter } from "react-router-dom";
+import CardModalPage from "./pages/CardDetailsModalPage";
 
 export const AppRouter = createBrowserRouter([
     {
@@ -20,7 +21,13 @@ export const AppRouter = createBrowserRouter([
             },
             {
                 path: "/board/:boardId",
-                element: <BoardPage />
+                element: <BoardPage />,
+                children: [
+                    {
+                        path: "card/:cardId",
+                        element: <CardModalPage />
+                    }
+                ]
             }
         ],
     },

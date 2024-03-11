@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { Modal } from "./UI/Modal/Modal";
 import { useMemo, useState } from "react";
-import { Board, SectionType } from "../types/types";
+import { Board, ICreateBoardCommand, SectionType } from "../types/types";
 import { IoClose, IoInformationCircleOutline, IoStarOutline } from "react-icons/io5";
 import { useCreateBoardMutation, useUpdateBoardMutation } from "../redux/slices/apiSlice";
 
@@ -11,10 +11,8 @@ interface IBoardsSectionProps {
 }
 
 interface ISectionItemProps {
-    board: Partial<Board>,
+    board: Board,
 }
-
-const getNewBoardInitialState = (): Partial<Board> => ({ title: "", isPrivate: false })
 
 const filterBoards = (boards: Board[], type: SectionType): Board[] => {
     switch (type) {
@@ -31,7 +29,7 @@ const SectionItem: React.FC<ISectionItemProps> = ({ board }) => {
 
     const handleUpdateBoardFavoriteMutation = async () => {
         try {
-            await UpdateBoardMutation({ id, isFavorite: !isFavorite });
+            await UpdateBoardMutation({ ...board, isFavorite: !isFavorite  });
         }
         catch (e) {
             console.error(e);
@@ -50,7 +48,7 @@ const SectionItem: React.FC<ISectionItemProps> = ({ board }) => {
 
 const NewBoardItem: React.FC = () => {
     const [createBoardMutation] = useCreateBoardMutation();
-    const [board, setBoard] = useState<Partial<Board>>(getNewBoardInitialState);
+    const [board, setBoard] = useState<ICreateBoardCommand>({ title: "", isPrivate: false });
     const [isNewBoardModalOpen, setNewBoardModalOpen] = useState<boolean>(false);
 
     const handleOpenModal = () => {
@@ -66,7 +64,7 @@ const NewBoardItem: React.FC = () => {
 
         try {
             await createBoardMutation(board);
-            setBoard(getNewBoardInitialState);
+            setBoard({ title: "", isPrivate: false });
             handleCloseModal();
         }
         catch (e) {
