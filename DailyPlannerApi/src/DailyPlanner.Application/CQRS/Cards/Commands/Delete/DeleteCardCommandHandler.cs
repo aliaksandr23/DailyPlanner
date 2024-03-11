@@ -19,7 +19,7 @@ namespace DailyPlanner.Application.CQRS.Cards.Commands.Delete
         public async Task<CardDto> Handle(DeleteCardCommand request, CancellationToken cancellationToken)
         {
             var cardToDelete = await _cardRepository
-                .GetCardByIdAsync(request.Id, request.ColumnId, cancellationToken);
+                .GetCardByIdAsync(request.Id, request.BoardId, cancellationToken);
             await _cardRepository
                 .DeleteAsync(cardToDelete, cancellationToken);
             return _mapper.Map<CardDto>(cardToDelete);

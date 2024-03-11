@@ -6,6 +6,6 @@ namespace DailyPlanner.Application.CQRS.Cards.Queries.GetById
     public record class GetByIdCardQuery : IQuery<CardDto>
     {
         public Guid Id { get; init; }
-        public Guid ColumnId { get; init; }
+        public Guid BoardId { get; init; }
     }
 }

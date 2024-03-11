@@ -19,7 +19,7 @@ namespace DailyPlanner.Application.CQRS.Cards.Queries.GetById
         public async Task<CardDto> Handle(GetByIdCardQuery request, CancellationToken cancellationToken)
         {
             var card = await _cardRepository
-                .GetCardByIdAsync(request.Id, request.ColumnId, cancellationToken);
+                .GetCardByIdAsync(request.Id, request.BoardId, cancellationToken);
             return _mapper.Map<CardDto>(card);
         }
     }

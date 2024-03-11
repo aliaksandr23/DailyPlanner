@@ -19,7 +19,7 @@ namespace DailyPlanner.Application.CQRS.Cards.Commands.Update
         public async Task<CardDto> Handle(UpdateCardCommand request, CancellationToken cancellationToken)
         {
             var cardToUpdate = await _cardRepository
-                .GetCardByIdAsync(request.Id, request.ColumnId, cancellationToken);
+                .GetCardByIdAsync(request.Id, request.BoardId, cancellationToken);
             _mapper.Map(request, cardToUpdate);
             await _cardRepository
                 .UpdateAsync(cardToUpdate, cancellationToken);

@@ -17,13 +17,13 @@ namespace DailyPlanner.Application.Mappings.Profiles
                 .ForMember(dst => dst.Priority, opt => opt.MapFrom(src => Enum.Parse(typeof(CardPriority), src.Priority)))
                 .ValidateMemberList(MemberList.Source);
             CreateMap<UpdateCardCommand, Card>()
-                .ForMember(dest => dest.Priority, opt =>
+                .ForMember(dst => dst.Priority, opt =>
                 {
                     opt.PreCondition(src => src.Priority is not null);
                     opt.MapFrom(src => Enum.Parse(typeof(CardPriority), src.Priority));
                 })
-                .ForMember(dest => dest.IsDone, opt => opt.Condition(src => src.IsDone is not null))
-                .ForMember(dest => dest.Description, opt => opt.Condition(src => src.Description is not null));
+                .ForMember(dst => dst.IsDone, opt => opt.Condition(src => src.IsDone is not null))
+                .ForMember(dst => dst.Description, opt => opt.Condition(src => src.Description is not null));
         }
     }
 }   

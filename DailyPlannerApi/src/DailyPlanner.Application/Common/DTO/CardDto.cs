@@ -4,6 +4,7 @@
     {
         public Guid Id { get; init; }
         public Guid ColumnId { get; init; }
+        public ColumnDto Column { get; init; }
         public string Title { get; init; }
         public string Description { get; init; }
         public bool IsDone { get; init; }
@@ -14,6 +15,5 @@
         public DateTime? UpdatedOn { get; init; }
         public DateTime? EndDate { get; init; }
         public DateTime? StartDate { get; init; }
-        public DateTime? RemindDate { get; init; }
     }
 }

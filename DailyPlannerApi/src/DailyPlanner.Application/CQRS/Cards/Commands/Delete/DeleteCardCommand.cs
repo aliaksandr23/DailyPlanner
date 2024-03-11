@@ -6,6 +6,6 @@ namespace DailyPlanner.Application.CQRS.Cards.Commands.Delete
     public record class DeleteCardCommand : ICommand<CardDto>
     {
         public Guid Id { get; init; }
-        public Guid ColumnId { get; init; }
+        public Guid BoardId { get; init; }
     }
 }

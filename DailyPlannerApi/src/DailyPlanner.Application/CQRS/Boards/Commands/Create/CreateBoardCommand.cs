@@ -7,6 +7,5 @@ namespace DailyPlanner.Application.CQRS.Boards.Commands.Create
     {
         public string Title { get; init; }
         public bool IsPrivate { get; init; }
-        public bool IsFavorite { get; init; }
     }
 }

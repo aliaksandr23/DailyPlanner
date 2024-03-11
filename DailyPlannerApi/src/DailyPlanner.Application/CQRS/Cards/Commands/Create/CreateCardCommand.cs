@@ -11,6 +11,5 @@ namespace DailyPlanner.Application.CQRS.Cards.Commands.Create
         public string Priority { get; init; }
         public DateTime? EndDate { get; init; }
         public DateTime? StartDate { get; init; }
-        public DateTime? RemindDate { get; init; }
     }
 }
