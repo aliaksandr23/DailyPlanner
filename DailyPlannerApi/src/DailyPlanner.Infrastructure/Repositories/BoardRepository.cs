@@ -1,7 +1,6 @@
 ﻿using DailyPlanner.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using DailyPlanner.Infrastructure.Data;
-using DailyPlanner.Application.Common.DTO;
 using DailyPlanner.Infrastructure.Exceptions;
 using DailyPlanner.Infrastructure.Services.User;
 using DailyPlanner.Application.Common.Repositories;
@@ -53,6 +52,12 @@ namespace DailyPlanner.Infrastructure.Repositories
                 IsFavorite = b.IsFavorite
             })
             .ToListAsync(cancellationToken);
+        }
+
+        public async Task<Board> GetFirstOrDefaultBoardAsync(Guid id, CancellationToken cancellationToken)
+        {
+            return await DbSet.FirstOrDefaultAsync(b => b.Id == id, cancellationToken)
+            ?? throw new EntityNotFoundException(typeof(Board));
         }
     }
 }

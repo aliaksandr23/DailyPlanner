@@ -6,5 +6,6 @@ namespace DailyPlanner.Application.Common.Repositories
     {
         Task<Board> GetBoardByIdAsync(Guid id, CancellationToken cancellationToken = default);
         Task<IEnumerable<Board>> GetAllBoardsAsync(CancellationToken cancellationToken = default);
+        Task<Board> GetFirstOrDefaultBoardAsync(Guid id, CancellationToken cancellationToken = default);
     }
 }

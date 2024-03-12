@@ -19,7 +19,7 @@ namespace DailyPlanner.Application.CQRS.Boards.Commands.Update
         public async Task<BoardDto> Handle(UpdateBoardCommand request, CancellationToken cancellationToken)
         {
             var boardToUpdate = await _boardRepository
-                .GetBoardByIdAsync(request.Id, cancellationToken);
+                .GetFirstOrDefaultBoardAsync(request.Id, cancellationToken);
             _mapper.Map(request, boardToUpdate);
             await _boardRepository
                 .UpdateAsync(boardToUpdate, cancellationToken);
