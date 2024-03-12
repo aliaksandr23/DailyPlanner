@@ -1,8 +1,8 @@
 import { format } from "date-fns";
 import { IoClose } from "react-icons/io5";
-import { ChangeEvent, useState } from "react";
-import { CardPriority } from "../types/types";
+import { Card, CardPriority } from "../types/types";
 import { Modal } from "../components/UI/Modal/Modal";
+import { ChangeEvent, useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Spinner } from "../components/UI/Spinner/Spinner";
 import { useDeleteCardMutation, useGetCardByIdQuery, useUpdateCardMutation } from "../redux/slices/apiSlice";
@@ -13,8 +13,21 @@ const CardDetailsModalPage: React.FC = () => {
     const [deleteCardMutation] = useDeleteCardMutation();
     const [isEditingPriority, setEditingPriority] = useState<boolean>(false);
     const { cardId, boardId } = useParams<{ boardId: string, cardId: string }>();
-    const [updatedPriority, setUpdatedPriority] = useState<CardPriority>(CardPriority.None);
     const { data: card, isLoading, isSuccess } = useGetCardByIdQuery({ id: cardId, boardId });
+    const [viewCardData, setViewCardData] = useState<Partial<Card>>({
+        title: "",
+        description: "",
+        isDone: false,
+        startDate: "",
+        endDate: "",
+        priority: CardPriority.None,
+    })
+
+    useEffect(() => {
+        if (isSuccess && card) {
+            setViewCardData(card);
+        }
+    }, [isSuccess, card]);
 
     const handleCloseCardDetailsModalPage = () => {
         navigate(`/board/${boardId}`);
@@ -28,13 +41,13 @@ const CardDetailsModalPage: React.FC = () => {
         );
     }
     else if (isSuccess && card) {
-        const { id, title, description, priority, endDate, column } = card;
+        const { title, description, priority, endDate } = viewCardData;
 
         const handleUpdateCardTitleMutation = async (e: ChangeEvent<HTMLHeadingElement>) => {
-            const newCardTitle = e.target.innerText
-            if (newCardTitle !== title) {
+            setViewCardData({ ...viewCardData, title: e.target.innerText })
+            if (title !== card.title && title) {
                 try {
-                    await updateCardMutation({ ...card, boardId: column.boardId, title: newCardTitle });
+                    await updateCardMutation({ ...card, boardId: card.column.boardId, title });
                 }
                 catch (e) {
                     console.error(e);
@@ -43,9 +56,9 @@ const CardDetailsModalPage: React.FC = () => {
         }
 
         const handleUpdateCardPriorityMutation = async () => {
-            if (updatedPriority !== priority) {
+            if (priority !== card.priority && priority) {
                 try {
-                    await updateCardMutation({ ...card, boardId: column.boardId, priority: updatedPriority })
+                    await updateCardMutation({ ...card, boardId: card.column.boardId, priority })
                 }
                 catch (e) {
                     console.error(e);
@@ -54,18 +67,26 @@ const CardDetailsModalPage: React.FC = () => {
             setEditingPriority(false);
         };
 
+        const handleUpdateCardDescriptionMutation = async () => {
+            if (description != card.description && description) {
+                try {
+                    await updateCardMutation({ ...card, boardId: card.column.boardId, description })
+                }
+                catch (e) {
+                    console.error(e);
+                }
+            }
+        }
+
         const handleDeleteCardMutation = async () => {
             try {
-                await deleteCardMutation({ id, boardId: column.boardId });
+                await deleteCardMutation({ id: card.id, boardId: card.column.boardId });
+                handleCloseCardDetailsModalPage();
             }
             catch (e) {
                 console.error(e);
             }
         }
-
-        const handlePriorityChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-            setUpdatedPriority(e.target.value as CardPriority);
-        };
 
         const handleOpenEditPriority = () => {
             setEditingPriority(true);
@@ -88,7 +109,7 @@ const CardDetailsModalPage: React.FC = () => {
                     <div className="view">
                         <div className="view-group">
                             <p className="view-label">In column:</p>
-                            <p className="view-data">{column.title}</p>
+                            <p className="view-data">{card.column.title}</p>
                         </div>
                         {endDate && (
                             <div className="view-group">
@@ -102,8 +123,8 @@ const CardDetailsModalPage: React.FC = () => {
                                 <select
                                     id="priority"
                                     className="view-select"
-                                    value={updatedPriority}
-                                    onChange={handlePriorityChange}
+                                    value={priority}
+                                    onChange={(e) => setViewCardData({ ...viewCardData, priority: e.target.value as CardPriority })}
                                     onBlur={handleUpdateCardPriorityMutation}>
                                     {Object.values(CardPriority).map((val) => (
                                         <option key={val} value={val}>
@@ -120,8 +141,9 @@ const CardDetailsModalPage: React.FC = () => {
                             <textarea
                                 id="description"
                                 rows={3}
-                                readOnly
                                 value={description}
+                                onBlur={handleUpdateCardDescriptionMutation}
+                                onChange={(e) => setViewCardData({ ...viewCardData, description: e.target.value })}
                                 className="view-textarea"
                             />
                         </div>

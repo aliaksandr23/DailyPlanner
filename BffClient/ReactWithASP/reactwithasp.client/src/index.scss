@@ -22,7 +22,8 @@
     --golden: #ffff00;
     --orange: #fd7e14;
     --dark-cyan: #008b8b;
-    --dark-teal: #00353f; 
+    --dark-teal: #00353f;
+    --light-orange: #ffbf66;
     --turquoise-blue: #08c5d1;
     --shadow-grey: #00000035;
 }
@@ -422,6 +423,7 @@ body {
         fill: var(--golden);
     }
 }
+
 .columns-section {
     display: grid;
     grid-gap: 1rem;
@@ -527,7 +529,7 @@ body {
         }
     }
 
-    .icon-close, 
+    .icon-close,
     .icon-delete {
         cursor: pointer;
         color: var(--dark-cyan);
