@@ -1,10 +1,11 @@
-﻿namespace DailyPlanner.Domain.Entities
+﻿using DailyPlanner.Domain.Entities.Common;
+
+namespace DailyPlanner.Domain.Entities;
+
+public sealed class Board : BaseAuditableEntity
 {
-    public sealed class Board : BaseAuditableEntity
-    {
-        public string Title { get; set; }
-        public bool IsPrivate { get; set; }
-        public bool IsFavorite { get; set; }
-        public IEnumerable<Column> Columns { get; set; }
-    }
+    public string Title { get; set; }
+    public bool IsPrivate { get; set; }
+    public bool IsFavorite { get; set; }
+    public IEnumerable<Column> Columns { get; set; }
 }

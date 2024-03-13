@@ -1,10 +1,9 @@
-﻿namespace DailyPlanner.Domain.Enums
+﻿namespace DailyPlanner.Domain.Enums;
+
+public enum CardPriority
 {
-    public enum CardPriority
-    {
-        None,
-        Low,
-        Medium,
-        High,
-    }
+    None,
+    Low,
+    Medium,
+    High,
 }
