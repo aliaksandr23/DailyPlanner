@@ -1,34 +1,31 @@
-﻿using DailyPlanner.Domain.Enums;
-using DailyPlanner.Domain.Entities;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using DailyPlanner.Infrastructure.Services.DateAndTime;
 
-namespace DailyPlanner.Infrastructure.Data
+namespace DailyPlanner.Infrastructure.Data;
+
+public class DailyPlannerDbInitializer
 {
-    public class DailyPlannerDbInitializer
+    private readonly DailyPlannerDbContext _context;
+    private readonly ILogger<DailyPlannerDbInitializer> _logger;
+
+    public DailyPlannerDbInitializer(DailyPlannerDbContext context,
+        ILogger<DailyPlannerDbInitializer> logger, IDateTimeService dateTimeService)
     {
-        private readonly DailyPlannerDbContext _context;
-        private readonly ILogger<DailyPlannerDbInitializer> _logger;
+        _logger = logger;
+        _context = context;
+    }
 
-        public DailyPlannerDbInitializer(DailyPlannerDbContext context,
-            ILogger<DailyPlannerDbInitializer> logger, IDateTimeService dateTimeService)
+    public async Task InitializeAsync(CancellationToken cancellationToken = default)
+    {
+        try
         {
-            _logger = logger;
-            _context = context;
+            await _context.Database.MigrateAsync(cancellationToken);
         }
-
-        public async Task InitializeAsync(CancellationToken cancellationToken = default)
+        catch (Exception ex)
         {
-            try
-            {
-                await _context.Database.MigrateAsync(cancellationToken);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "An error occurred while initializing the database");
-                throw;
-            }
+            _logger.LogError(ex, "An error occurred while initializing the database");
+            throw;
         }
     }
 }

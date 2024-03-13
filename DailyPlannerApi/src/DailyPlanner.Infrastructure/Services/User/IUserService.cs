@@ -1,7 +1,6 @@
-﻿namespace DailyPlanner.Infrastructure.Services.User
+﻿namespace DailyPlanner.Infrastructure.Services.User;
+
+public interface IUserService
 {
-    public interface IUserService
-    {
-        public Guid UserId { get; }
-    }
+    public Guid UserId { get; }
 }

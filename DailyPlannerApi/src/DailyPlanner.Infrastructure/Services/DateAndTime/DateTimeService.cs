@@ -1,7 +1,6 @@
-﻿namespace DailyPlanner.Infrastructure.Services.DateAndTime
+﻿namespace DailyPlanner.Infrastructure.Services.DateAndTime;
+
+public class DateTimeService : IDateTimeService
 {
-    public class DateTimeService : IDateTimeService
-    {
-        public DateTime Now => DateTime.Now;
-    }
+    public DateTime Now => DateTime.Now;
 }

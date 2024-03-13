@@ -3,20 +3,19 @@ using Microsoft.EntityFrameworkCore;
 using DailyPlanner.Domain.Configuration;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace DailyPlanner.Infrastructure.Data.EntitiesConfigurations
+namespace DailyPlanner.Infrastructure.Data.EntitiesConfigurations;
+
+internal class CardConfiguration : BaseAuditableEntityConfiguration<Card>
 {
-    internal class CardConfiguration : IEntityTypeConfiguration<Card>
+    public override void Configure(EntityTypeBuilder<Card> builder)
     {
-        public void Configure(EntityTypeBuilder<Card> builder)
-        {
-            builder.Property(c => c.CreatedBy).IsRequired();
-            builder.Property(c => c.Priority).HasConversion<string>();
-            builder.Property(c => c.Description).HasMaxLength(EntitiesConfigurationConstants.MaxCardDescriptionLength);
-            builder.Property(c => c.Title).IsRequired().HasMaxLength(EntitiesConfigurationConstants.MaxBoardTitleLength);
-            builder.Property(c => c.EndDate).HasColumnType("smalldatetime");
-            builder.Property(c => c.StartDate).HasColumnType("smalldatetime");
-            builder.Property(c => c.UpdatedOn).HasColumnType("smalldatetime");
-            builder.Property(c => c.CreatedOn).IsRequired().HasColumnType("smalldatetime");
-        }
+        base.Configure(builder);
+        builder.OwnsOne(c => c.CardDateSection);
+        builder.Property(c => c.Priority).IsRequired().HasConversion<string>();
+        builder.Property(c => c.Title).IsRequired().HasMaxLength(EntitiesConfigurationConstants.MaxBoardTitleLength);
+        builder.Property(c => c.Description).IsRequired().HasMaxLength(EntitiesConfigurationConstants.MaxCardDescriptionLength);
+        builder.Property(c => c.CardDateSection.IsDone).IsRequired().HasColumnName("IsDone");
+        builder.Property(c => c.CardDateSection.EndDate).HasColumnType("smalldatetime");
+        builder.Property(c => c.CardDateSection.StartDate).HasColumnType("smalldatetime");
     }
 }

@@ -5,18 +5,17 @@ using DailyPlanner.Infrastructure.Exceptions;
 using DailyPlanner.Infrastructure.Services.User;
 using DailyPlanner.Application.Common.Repositories;
 
-namespace DailyPlanner.Infrastructure.Repositories
-{
-    public class ColumnRepository : BaseRepository<Column>, IColumnRepository
-    {
-        public ColumnRepository(DailyPlannerDbContext context, IUserService userService)
-            : base(context, userService) { }
+namespace DailyPlanner.Infrastructure.Repositories;
 
-        public async Task<Column> GetColumnByIdAsync(Guid id, Guid boardId, CancellationToken cancellationToken)
-        {
-            return await DbSet.FirstOrDefaultAsync(c => c.Id == id
-            && c.BoardId == boardId, cancellationToken)
-            ?? throw new EntityNotFoundException(typeof(Column));
-        }
+public class ColumnRepository : BaseRepository<Column>, IColumnRepository
+{
+    public ColumnRepository(DailyPlannerDbContext context, IUserService userService)
+        : base(context, userService) { }
+
+    public async Task<Column> GetColumnByIdAsync(Guid id, Guid boardId, CancellationToken cancellationToken)
+    {
+        return await DbSet.FirstOrDefaultAsync(c => c.Id == id
+        && c.BoardId == boardId, cancellationToken)
+        ?? throw new EntityNotFoundException(typeof(Column));
     }
 }
