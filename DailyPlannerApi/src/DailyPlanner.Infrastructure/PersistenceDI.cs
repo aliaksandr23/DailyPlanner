@@ -32,5 +32,7 @@ public static class PersistenceDI
         services.AddScoped<ICardRepository, CardRepository>();
         services.AddScoped<IBoardRepository, BoardRepository>();
         services.AddScoped<IColumnRepository, ColumnRepository>();
+        services.AddScoped<IToDoListRepository, ToDoListRepository>();
+        services.AddScoped<IToDoItemRepository, ToDoItemRepository>();
     }
 }
