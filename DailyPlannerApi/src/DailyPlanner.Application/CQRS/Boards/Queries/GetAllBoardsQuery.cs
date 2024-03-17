@@ -3,8 +3,10 @@ using DailyPlanner.Application.Common.DTO;
 using DailyPlanner.Application.Common.Repositories;
 using DailyPlanner.Application.CQRS.Abstractions.Queries;
 
-namespace DailyPlanner.Application.CQRS.Boards.Queries.GetAll
+namespace DailyPlanner.Application.CQRS.Boards.Queries
 {
+    public record class GetAllBoardsQuery : IQuery<IEnumerable<BoardDto>> { }
+
     internal class GetAllBoardsQueryHandler : IQueryHandler<GetAllBoardsQuery, IEnumerable<BoardDto>>
     {
         private readonly IMapper _mapper;

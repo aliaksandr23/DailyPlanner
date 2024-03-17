@@ -3,8 +3,15 @@ using DailyPlanner.Application.Common.DTO;
 using DailyPlanner.Application.Common.Repositories;
 using DailyPlanner.Application.CQRS.Abstractions.Commands;
 
-namespace DailyPlanner.Application.CQRS.Columns.Commands.Update
+namespace DailyPlanner.Application.CQRS.Columns.Commands
 {
+    public record class UpdateColumnCommand : ICommand<ColumnDto>
+    {
+        public Guid Id { get; init; }
+        public Guid BoardId { get; init; }
+        public string Title { get; init; }
+    }
+
     internal class UpdateColumnCommandHandler : ICommandHandler<UpdateColumnCommand, ColumnDto>
     {
         private readonly IMapper _mapper;
@@ -19,7 +26,7 @@ namespace DailyPlanner.Application.CQRS.Columns.Commands.Update
         public async Task<ColumnDto> Handle(UpdateColumnCommand request, CancellationToken cancellationToken)
         {
             var columnToUpdate = await _columnRepository
-                .GetColumnByIdAsync(request.Id, request.BoardId, cancellationToken);
+                .GetFirstOrDefaultColumnAsync(request.Id, request.BoardId, cancellationToken);
             _mapper.Map(request, columnToUpdate);
             await _columnRepository
                 .UpdateAsync(columnToUpdate, cancellationToken);

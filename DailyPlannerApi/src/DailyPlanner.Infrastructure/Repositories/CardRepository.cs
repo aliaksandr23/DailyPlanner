@@ -28,6 +28,7 @@ public class CardRepository : BaseRepository<Card>, ICardRepository
                 EndDate = c.CardDateSection.EndDate,
                 StartDate = c.CardDateSection.StartDate,
             },
+            ToDoLists = c.ToDoLists,
             CreatedOn = c.CreatedOn,
             CreatedBy = c.CreatedBy,
             UpdatedOn = c.UpdatedOn,

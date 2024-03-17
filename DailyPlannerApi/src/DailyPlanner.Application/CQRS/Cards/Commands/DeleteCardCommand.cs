@@ -3,8 +3,14 @@ using DailyPlanner.Application.Common.DTO;
 using DailyPlanner.Application.Common.Repositories;
 using DailyPlanner.Application.CQRS.Abstractions.Commands;
 
-namespace DailyPlanner.Application.CQRS.Cards.Commands.Delete
+namespace DailyPlanner.Application.CQRS.Cards.Commands
 {
+    public record class DeleteCardCommand : ICommand<CardDto>
+    {
+        public Guid Id { get; init; }
+        public Guid BoardId { get; init; }
+    }
+
     internal class DeleteCardCommandHandler : ICommandHandler<DeleteCardCommand, CardDto>
     {
         private readonly IMapper _mapper;

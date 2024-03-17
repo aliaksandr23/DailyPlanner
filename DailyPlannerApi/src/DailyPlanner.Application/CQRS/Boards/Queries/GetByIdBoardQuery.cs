@@ -3,8 +3,13 @@ using DailyPlanner.Application.Common.DTO;
 using DailyPlanner.Application.Common.Repositories;
 using DailyPlanner.Application.CQRS.Abstractions.Queries;
 
-namespace DailyPlanner.Application.CQRS.Boards.Queries.GetById
+namespace DailyPlanner.Application.CQRS.Boards.Queries
 {
+    public record class GetByIdBoardQuery : IQuery<BoardDto>
+    {
+        public Guid Id { get; init; }
+    }
+
     internal class GetByIdBoardQueryHandler : IQueryHandler<GetByIdBoardQuery, BoardDto>
     {
         private readonly IMapper _mapper;

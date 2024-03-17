@@ -4,8 +4,14 @@ using DailyPlanner.Application.Common.DTO;
 using DailyPlanner.Application.Common.Repositories;
 using DailyPlanner.Application.CQRS.Abstractions.Commands;
 
-namespace DailyPlanner.Application.CQRS.Boards.Commands.Create
+namespace DailyPlanner.Application.CQRS.Boards.Commands
 {
+    public record class CreateBoardCommand : ICommand<BoardDto>
+    {
+        public string Title { get; init; }
+        public bool IsPrivate { get; init; }
+    }
+
     internal class CreateBoardCommandHandler : ICommandHandler<CreateBoardCommand, BoardDto>
     {
         private readonly IMapper _mapper;

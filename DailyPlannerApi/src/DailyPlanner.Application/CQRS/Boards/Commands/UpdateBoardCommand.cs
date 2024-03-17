@@ -3,8 +3,16 @@ using DailyPlanner.Application.Common.DTO;
 using DailyPlanner.Application.Common.Repositories;
 using DailyPlanner.Application.CQRS.Abstractions.Commands;
 
-namespace DailyPlanner.Application.CQRS.Boards.Commands.Update
+namespace DailyPlanner.Application.CQRS.Boards.Commands
 {
+    public record class UpdateBoardCommand : ICommand<BoardDto>
+    {
+        public Guid Id { get; init; }
+        public string Title { get; init; }
+        public bool? IsPrivate { get; init; } = null;
+        public bool? IsFavorite { get; init; } = null;
+    }
+
     internal class UpdateBoardCommandHandler : ICommandHandler<UpdateBoardCommand, BoardDto>
     {
         private readonly IMapper _mapper;

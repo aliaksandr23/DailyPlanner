@@ -4,8 +4,14 @@ using DailyPlanner.Application.Common.DTO;
 using DailyPlanner.Application.Common.Repositories;
 using DailyPlanner.Application.CQRS.Abstractions.Commands;
 
-namespace DailyPlanner.Application.CQRS.Columns.Commands.Create
+namespace DailyPlanner.Application.CQRS.Columns.Commands
 {
+    public record class CreateColumnCommand : ICommand<ColumnDto>
+    {
+        public Guid BoardId { get; init; }
+        public string Title { get; init; }
+    }
+
     internal class CreateColumnCommandHandler : ICommandHandler<CreateColumnCommand, ColumnDto>
     {
         private readonly IMapper _mapper;

@@ -1,6 +1,5 @@
 ﻿using MediatR;
 
-namespace DailyPlanner.Application.CQRS.Abstractions.Queries
-{
-    public interface IQuery<out TResponse> : IRequest<TResponse> { }
-}
+namespace DailyPlanner.Application.CQRS.Abstractions.Queries;
+
+public interface IQuery<out TResponse> : IRequest<TResponse> { }

@@ -1,18 +1,23 @@
 ﻿using FluentValidation;
-using DailyPlanner.Domain.Configuration;
-using DailyPlanner.Application.CQRS.Boards.Commands.Update;
+using DailyPlanner.Application.CQRS.Boards.Commands;
+using static DailyPlanner.Domain.Configuration.EntitiesConfigurationConstants;
 
-namespace DailyPlanner.Application.Validators.Boards
+namespace DailyPlanner.Application.Validators.Boards;
+
+internal class UpdateBoardCommandValidator : AbstractValidator<UpdateBoardCommand>
 {
-    public class UpdateBoardCommandValidator : AbstractValidator<UpdateBoardCommand>
+    public UpdateBoardCommandValidator()
     {
-        public UpdateBoardCommandValidator()
-        {
-            RuleFor(b => b.Title)
-                .NotEmpty().When(b => b.Title is not null)
-                .WithMessage("Please enter board title")
-                .MaximumLength(EntitiesConfigurationConstants.MaxBoardTitleLength)
-                .WithMessage($"Board title must not exceed {EntitiesConfigurationConstants.MaxBoardTitleLength} characters");
-        }
+        RuleFor(b => b.Title)
+            .NotEmpty()
+            .WithMessage("Please enter board title")
+            .MaximumLength(BoardConstants.MaxTitleLength)
+            .WithMessage($"Board title must not exceed {BoardConstants.MaxTitleLength} characters");
+        RuleFor(b => b.IsPrivate)
+            .NotNull()
+            .WithMessage("Field: \"Private\" can't be null");
+        RuleFor(b => b.IsFavorite)
+            .NotNull()
+            .WithMessage("Field: \"Favorite\" can't be null");
     }
 }

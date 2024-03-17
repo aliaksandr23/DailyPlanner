@@ -2,18 +2,17 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 
-namespace DailyPlanner.ApiHost.Controllers
-{
-    [Authorize]
-    [ApiController]
-    [Route("[controller]")]
-    public class BaseController : ControllerBase
-    {
-        protected ISender Sender { get; }
+namespace DailyPlanner.ApiHost.Controllers;
 
-        public BaseController(ISender sender)
-        {
-            Sender = sender;
-        }
+[Authorize]
+[ApiController]
+[Route("[controller]")]
+public class BaseController : ControllerBase
+{
+    protected ISender Sender { get; }
+
+    public BaseController(ISender sender)
+    {
+        Sender = sender;
     }
 }

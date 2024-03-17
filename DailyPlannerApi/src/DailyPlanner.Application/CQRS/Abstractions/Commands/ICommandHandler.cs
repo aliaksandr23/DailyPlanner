@@ -1,8 +1,7 @@
 ﻿using MediatR;
 
-namespace DailyPlanner.Application.CQRS.Abstractions.Commands
-{
-    public interface ICommandHandler<in TCommand, TResponse> : IRequestHandler<TCommand, TResponse>
-        where TCommand : ICommand<TResponse>
-    { }
-}
+namespace DailyPlanner.Application.CQRS.Abstractions.Commands;
+
+public interface ICommandHandler<in TCommand, TResponse> : IRequestHandler<TCommand, TResponse>
+    where TCommand : ICommand<TResponse>
+{ }

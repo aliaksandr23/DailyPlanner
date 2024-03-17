@@ -3,8 +3,14 @@ using DailyPlanner.Application.Common.DTO;
 using DailyPlanner.Application.Common.Repositories;
 using DailyPlanner.Application.CQRS.Abstractions.Queries;
 
-namespace DailyPlanner.Application.CQRS.Cards.Queries.GetById
+namespace DailyPlanner.Application.CQRS.Cards.Queries
 {
+    public record class GetByIdCardQuery : IQuery<CardDto>
+    {
+        public Guid Id { get; init; }
+        public Guid BoardId { get; init; }
+    }
+
     internal class GetByIdCardQueryHandler : IQueryHandler<GetByIdCardQuery, CardDto>
     {
         private readonly IMapper _mapper;
